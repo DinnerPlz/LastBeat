@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DEBUG
+
+using System;
 using System.Xml;
 
 namespace QuadTreeUnity
@@ -145,7 +147,9 @@ namespace QuadTreeUnity
             
             public Node[] c; // children
 
-            public Node p;
+            public Node p; // ref to perent node
+
+            public int r; // depth of node, 0 is base level, pos inf is small, neg inf is big
         
         }
         public Node baseNode;
@@ -153,24 +157,65 @@ namespace QuadTreeUnity
         {
             // adds child nodes 
         }
-        unsafe void CreateParentNode(Node n)
+        public void CreateParentNode(Node n, int corner)
         {
-            if (new IntPtr(n.p).ToInt32() != 0)
+            // function is used to expand the tree
+            // a larger node will be created above n, and all requirement 
+            // to make a quadtree will be met
+            // corner
+            // 2 = north west
+            // 3 = north east
+            // 0 = south east
+            // 1 = south west
+            // in accordance to http://www.lcad.icmc.usp.br/~jbatista/procimg/quadtree_neighbours.pdf
+
+            // n is the old father node
+            // p is new father node
+            // n is now child of p
+
+            if (n.p != null)
                 return; // only should becalled on father nodes
+
             Node p = new Node();
+            p.r = n.r--; // set depth
+            p.c = new Node[4];
+
+            for (int i = 0; i < p.c.Length; i ++)
+            {
+                if (i == corner)
+                {
+                    p.c[i] = n;
+                    // if the corner lines up with the node, set that child to n
+                }
+                else
+                {
+                    p.c[i] = new Node();
+                    // is the corner is not the one defined make a new node
+                }
+                p.c[i].r = n.r; 
+                // set depth of new father node's children to the same as the node being slip
+            }
 
 
         }
         public QuadTree()
         {
             baseNode = new Node();
+            baseNode.r = 0;
         }
     
     }
 
     unsafe public class Program
     {
-        
+#if DEBUG 
+        void Visualize()
+        {
+            // visualize tree (debug)
+
+        }
+
+#endif
         unsafe static void Main(string[] args)
         {
             /*
@@ -200,10 +245,13 @@ namespace QuadTreeUnity
 
             Console.WriteLine("here?");
             QuadTree.Node e = new QuadTree.Node();
-            Console.WriteLine(new IntPtr(qt.baseNode.p));
+            e = qt.baseNode;
             while (true)
             {
-                     
+                qt.CreateParentNode(e, 0);
+                e = e.p;
+                Console.WriteLine(e.r);
+
             }
         }
     }
