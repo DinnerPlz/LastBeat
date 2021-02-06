@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Joel Danielewicz\\OneDrive\\Desktop\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj": {}
+    "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Joel Danielewicz\\OneDrive\\Desktop\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj": {
+    "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Joel Danielewicz\\OneDrive\\Desktop\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
+        "projectUniqueName": "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
         "projectName": "QuadTreeUnity",
-        "projectPath": "C:\\Users\\Joel Danielewicz\\OneDrive\\Desktop\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
+        "projectPath": "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
         "packagesPath": "C:\\Users\\Joel Danielewicz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Joel Danielewicz\\OneDrive\\Desktop\\QuadTreeUnity\\QuadTreeUnity\\obj\\",
+        "outputPath": "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Joel Danielewicz\\AppData\\Roaming\\NuGet\\NuGet.Config",

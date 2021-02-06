@@ -1,43 +1,64 @@
 {
-  "version": 2,
+  "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {}
   },
   "libraries": {},
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": [
-      "Microsoft.NETCore.App >= 3.1.0"
-    ]
+    ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\student.CSS-RM107-29\\.nuget\\packages\\": {}
+    "C:\\Users\\Joel Danielewicz\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\student.CSS-RM107-29\\Documents\\Joel\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
+      "projectUniqueName": "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
       "projectName": "QuadTreeUnity",
-      "projectPath": "C:\\Users\\student.CSS-RM107-29\\Documents\\Joel\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
-      "outputPath": "C:\\Users\\student.CSS-RM107-29\\Documents\\Joel\\QuadTreeUnity\\QuadTreeUnity\\obj\\",
+      "projectPath": "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\QuadTreeUnity.csproj",
+      "packagesPath": "C:\\Users\\Joel Danielewicz\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Joel Danielewicz\\OneDrive\\Documents\\Git\\LastBeat\\LastBeat\\QuadTreeUnity\\QuadTreeUnity\\obj\\",
       "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\Joel Danielewicz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {}
         }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
       }
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "dependencies": {
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
           "Microsoft.NETCore.App": {
-            "target": "Package",
-            "version": "3.1",
-            "autoReferenced": true
+            "privateAssets": "all"
           }
-        }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
