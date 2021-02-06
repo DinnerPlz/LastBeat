@@ -142,7 +142,7 @@ namespace QuadTreeUnity
             
         }
         */
-        public unsafe class Node
+        public class Node
         {
             
             public Node[] c; // children
@@ -150,6 +150,14 @@ namespace QuadTreeUnity
             public Node p; // ref to perent node
 
             public int r; // depth of node, 0 is base level, pos inf is small, neg inf is big
+
+            public float e;
+            public float e2;
+            public float e3;
+            public float e4;
+            public float e5;
+            public float e6;
+            public float e7;
         
         }
         public Node baseNode;
@@ -177,7 +185,8 @@ namespace QuadTreeUnity
                 return; // only should becalled on father nodes
 
             Node p = new Node();
-            p.r = n.r--; // set depth
+
+            p.r = n.r - 1; // set depth
             p.c = new Node[4];
 
             for (int i = 0; i < p.c.Length; i ++)
@@ -195,6 +204,7 @@ namespace QuadTreeUnity
                 p.c[i].r = n.r; 
                 // set depth of new father node's children to the same as the node being slip
             }
+            n.p = p;
 
 
         }
@@ -249,8 +259,9 @@ namespace QuadTreeUnity
             while (true)
             {
                 qt.CreateParentNode(e, 0);
+
                 e = e.p;
-                Console.WriteLine(e.r);
+                //Console.WriteLine(e.r);
 
             }
         }
