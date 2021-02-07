@@ -1,6 +1,8 @@
 ﻿#define DEBUG
 
 using System;
+using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 
 namespace QuadTreeUnity
@@ -95,7 +97,9 @@ namespace QuadTreeUnity
         }
     } // garbage
     */
-    unsafe public class QuadTree
+
+    
+    public class QuadTree
     {
         /*
          * This is the second attempt to make a quad tree
@@ -142,6 +146,12 @@ namespace QuadTreeUnity
             
         }
         */
+        const int _MAXDEPTH = 30; // devisons will not go further than r = 20
+        const int _MINDEPTH = -30; // no nodes with a depth smaller will be made
+        // total depth = 60, 60^4 tiles possible,  12,960,000
+
+        public Node baseNode;
+
         public class Node
         {
             
@@ -160,7 +170,6 @@ namespace QuadTreeUnity
             public float e7;
         
         }
-        public Node baseNode;
         unsafe void SplitNode()
         {
             // adds child nodes 
@@ -183,6 +192,8 @@ namespace QuadTreeUnity
 
             if (n.p != null)
                 return; // only should becalled on father nodes
+            if (n.r - 1 < _MINDEPTH)
+                return; // do not go below min depth
 
             Node p = new Node();
 
@@ -230,11 +241,11 @@ namespace QuadTreeUnity
         {
             /*
                 QuadTree qt;
-                qt = new QuadTree();
                 for(int i = 0; i < qt.n.Length; i++)
                 {
                     qt.n[i].q = new float[] { 1,2,3,4,5,6,7,8,9,0};
                 }
+                qt = new QuadTree();
 
                 for (int i = 0; i < 200000;i++) {
                     qt.FragmentNode(i);
@@ -261,7 +272,7 @@ namespace QuadTreeUnity
                 qt.CreateParentNode(e, 0);
 
                 e = e.p;
-                //Console.WriteLine(e.r);
+                Console.WriteLine(e.r);
 
             }
         }
