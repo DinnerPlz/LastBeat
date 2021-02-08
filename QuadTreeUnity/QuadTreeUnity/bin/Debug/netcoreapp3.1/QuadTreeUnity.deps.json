@@ -1,12 +1,13 @@
 {
   "runtimeTarget": {
-    "name": ".NETCoreApp,Version=v3.1",
-    "signature": ""
+    "name": ".NETCoreApp,Version=v3.1/",
+    "signature": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
   },
   "compilationOptions": {},
   "targets": {
-    ".NETCoreApp,Version=v3.1": {
-      "QuadTreeUnity/1.0.0": {
+    ".NETCoreApp,Version=v3.1": {},
+    ".NETCoreApp,Version=v3.1/": {
+      "quadtreeunity/1.0.0": {
         "runtime": {
           "QuadTreeUnity.dll": {}
         }
@@ -14,7 +15,7 @@
     }
   },
   "libraries": {
-    "QuadTreeUnity/1.0.0": {
+    "quadtreeunity/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
