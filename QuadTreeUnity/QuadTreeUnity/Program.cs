@@ -5,11 +5,12 @@ using System.Drawing;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 
-
-
 namespace QuadTreeUnity
 {
 
+    /*
+
+    */
     /*
     public class QuadTreeA
     {
@@ -97,10 +98,10 @@ namespace QuadTreeUnity
     } // garbage
     */
 
-    /*
-    public class QuadTreeB
+    
+    public class QuadTree
     {
-        
+        /*
          * This is the second attempt to make a quad tree
          * QuadTreeA was discarded due inabliliy to expand past a certin point
          * it has also been made apperent that pointers can be used
@@ -125,7 +126,11 @@ namespace QuadTreeUnity
          * negitive being larger than the base node
          * A father node is a node with no perents
          *
-         
+         * 
+         * 
+         * 
+         *  EDIT: after further consideration it was decided that 
+         */
 
         /*
         public unsafe struct Node
@@ -144,12 +149,10 @@ namespace QuadTreeUnity
             // all other data
             
         }
-        
+        */
         const int _MAXDEPTH = 30; // devisons will not go further than r = 20
         const int _MINDEPTH = -30; // no nodes with a depth smaller will be made
         // total depth = 60, 60^4 tiles possible,  12,960,000
-
-        public Node baseNode;
 
         public class Node
         {
@@ -169,10 +172,7 @@ namespace QuadTreeUnity
             public float e7;
         
         }
-        unsafe void SplitNode()
-        {
-            // adds child nodes 
-        }
+        public Node baseNode;
         public void CreateParentNode(Node n, int corner)
         {
             // function is used to expand the tree
@@ -224,12 +224,6 @@ namespace QuadTreeUnity
             baseNode.r = 0;
         }
     
-    } 
-    */
-
-    public class QuadTree
-    {
-
     }
 
     unsafe public class Program
@@ -244,6 +238,22 @@ namespace QuadTreeUnity
 #endif
         unsafe static void Main(string[] args)
         {
+            /*
+                QuadTree qt;
+                qt = new QuadTree();
+                for(int i = 0; i < qt.n.Length; i++)
+                {
+                    qt.n[i].q = new float[] { 1,2,3,4,5,6,7,8,9,0};
+                }
+
+                for (int i = 0; i < 200000;i++) {
+                    qt.FragmentNode(i);
+                }
+
+            */
+
+            QuadTree qt = new QuadTree();
+            
 
 
             var watch = new System.Diagnostics.Stopwatch();
@@ -253,8 +263,16 @@ namespace QuadTreeUnity
             Console.WriteLine(watch.ElapsedMilliseconds);
 
 
+            Console.WriteLine("here?");
+            QuadTree.Node e = new QuadTree.Node();
+            e = qt.baseNode;
             while (true)
             {
+                qt.CreateParentNode(e, 0);
+
+                e = e.p;
+                Console.WriteLine(e.r);
+
             }
         }
     }
