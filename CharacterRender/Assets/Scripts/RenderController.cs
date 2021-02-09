@@ -76,7 +76,7 @@ public class RenderController : MonoBehaviour
             render = false;
             temp = view.normalSheet;
             temp.Apply();
-            view.SaveSheets(@"C:\Users\Joel Danielewicz\Documents\Unity\CharacterRender\Assets\STONK");
+            view.SaveSheets(@"C:\Users\Joel Danielewicz\OneDrive\Documents\Git\LastBeat\LastBeat\CharacterRender\Assets\STONK");
             return; // break statment
         }
         if (_frame == 0)

@@ -70,37 +70,37 @@
     <Compile Include="Assets\Scripts\TEST_SYSTEM_DISABLE_ON_BUILD.cs" />
     <None Include="Assets\Scripts\Shaders\NormalRen.shader" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:/Users/Joel Danielewicz/Documents/Unity/CharacterRender/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>C:/Users/Joel Danielewicz/OneDrive/Documents/Git/LastBeat/LastBeat/CharacterRender/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.9f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
