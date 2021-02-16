@@ -45,39 +45,55 @@ namespace QuadTree
             public Node[] c; // children
             public Node p; // ref to perent node
             public int r; // depth of node, 0 is base level, pos inf is small, neg inf is big
-            public bool south;
-            public bool east;
+            byte pos;
             /*
              * _______
-             * |10|11|
-             * |__|__|
              * |00|01|
+             * |__|__|
+             * |10|11|
              * |__|__|
              */ 
 
             // vars used for sim
+            public byte[] FindNeighbor(byte direct)
+            {
+                switch (direct)
+                {
+                    case
+                }
+            }
             public bool[][] FindNeighbors()
             {
-                return null;
-            }
-            public bool[] FindAddress()
-            {
-                Node n = this;
-                int i = 0;
-                bool[] add = new bool[currnetDepth * 2];
-                while (n.p != null)
+                // use finite state macine
+                // top left 0x0
+                // top right 0x1
+                // bottom left 0x2
+                // bottom right 0x3
+
+                byte[][] neigh;
+
+                switch (pos)
                 {
-                    add[i] = n.south;
-                    add[i + 1] = n.east;
-                    i += 2;
-                }
-                return add;
+                    case 0x0: // top left
+
+
+                        break;
+                    case 0x01: // top right
+
+                        break;
+                    case 0x2: // bottom left
+
+                        break;
+                    case 0x3: // top right
+
+                        break;
+                } 
+                return null;
             }
             public Node()
             {
                 // write neighbors
             }
-
         }
         public Node baseNode;
         public void CreateParentNode(Node n, int corner)
@@ -88,10 +104,6 @@ namespace QuadTree
              * a larger node will be created above n, and all requirement 
              * to make a quadtree will be met
              * corner
-             * 2 = north west
-             * 3 = north east
-             * 0 = south east
-             * 1 = south west
              * in accordance to http://www.lcad.icmc.usp.br/~jbatista/procimg/quadtree_neighbours.pdf
              *
              * n is the old father node
