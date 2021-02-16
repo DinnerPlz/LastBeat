@@ -63,9 +63,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\LogisticCalculator.cs" />
-    <Compile Include="Assets\QuadTreeCPU.cs" />
-    <Compile Include="Assets\SpellSystem.cs" />
+    <Compile Include="Assets\Scripts\Extension.cs" />
+    <Compile Include="Assets\Scripts\LogisticCalculator.cs" />
+    <Compile Include="Assets\Scripts\QuadTreeCPU.cs" />
+    <Compile Include="Assets\Scripts\SpellSystem.cs" />
     <None Include="Assets\SpellParticleManager.compute" />
     <Reference Include="UnityEngine">
       <HintPath>D:/UnityVersions/2019.4.19f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
