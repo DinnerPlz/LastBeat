@@ -6,13 +6,13 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace QuadTree
+namespace Trees
 {
     public class QuadTree
     {
         const int _MAXDEPTH = 100;
         static public int currentDepth;
-        public static byte[,,] quadLookUp = new byte[,,] { 
+        public static byte[,,] quadLookUp = new byte[,,] {
             {{0x1, 0xff },{0x1, 0x1 },{0x2, 0xff },{0x2, 0x3 },{0x3, 0x3 },{0x3, 0xff },{0x3, 0x1 },{0x3, 0x7 }},
             {{0x0, 0x0 },{0x0, 0xff },{0x3, 0xff },{0x3, 0x3 },{0x2, 0x4 },{0x2, 0xff },{0x2, 0xff},{0x2, 0x3 }},
             {{0x3, 0xff },{0x3, 0x1 },{0x0, 0x2 },{0x0, 0xff },{0x1, 0xff },{0x1, 0x2 },{0x1, 0x6 },{0x1, 0x0 }},
@@ -31,6 +31,9 @@ namespace QuadTree
          * [instruction to create the address]
          * when you are trying to find the neghbors you do as so:
          * this is a quad at the top left square, sampling to left
+         * bool[0,1] is the instrustion set, {0x1, 0x1}
+         * meaning the code is (1, whatever is to the left to perent node)
+         * 
          */
 
         public class Node
@@ -38,171 +41,85 @@ namespace QuadTree
             public Node p; // perent
             public Node[] c; // children
             public int r; // depth
-            byte pos; // gives relitive position 
+            public byte pos; // gives relitive position 
 
             public Node FindNeighbor(byte direction)
             {
-                Node n = null;
+                List<byte> code = new List<byte>();
+                Node n; // curent node, default is this
+                byte d = direction;
+                n = this;
 
-                
+                while (n.p != null)
+                {
+                    code.Add(quadLookUp[n.pos, d, 0]);
+                    d = quadLookUp[n.pos, d, 1];
+                    if (d == 0xff)
+                        break;
+                    n = n.p;
+                    
+                }
+
+                string e = "";
+                for (int i = 0; i < code.Count; i ++)
+                {
+                    e = e + " " + code[i];
+                }
+                Debug.Log(e);
+                n = FindNodeFromRef(this, code.ToArray());
 
                 return n;
             }
-
-
-        }
-    } // haha refactor 
-    public class QuadTreeh
-    {
-        /*
-         * This is the second attempt to make a quad tree
-         * QuadTreeA was discarded due inabliliy to expand past a certin point
-         * it has also been made apperent that pointers can be used
-         * I will likely be running the simulating on CPU
-         * bause I have decided that the speed is satifactory
-         * but I likey will still leave room for a GUP implentation
-         * This will likely be achived in a new rendition of the quadtree class
-         * and will work on the same array baised pointer system used in
-         * quadtreeA
-         * 
-         * The aim of this quadtree is to allow for dynamic size,
-         * this will be achived by allowing the base node (node with no perents)
-         * to create a perent and change it's depth to r = 1
-         * An implentation of a neighbor finder will be used to finnalize
-         * this implentaion of a quad tree
-         * 
-         * DEFINIONS:
-         * r reffers to the depth of a specific node
-         * the base node reffers to the least deep node at start
-         * nodes may either expand in a positive or negitive direction
-         * positive being smaller that the base node 
-         * negitive being larger than the base node
-         * A father node is a node with no perents
-         */
-
-        const int _MINDEPTH = -100; // no nodes with a depth smaller will be made
-        static public int currnetDepth; // the largest current node, used for nighbor finding
-
-        
-        public class Node
-        {
-            public Node[] c; // children
-            public Node p; // ref to perent node
-            public int r; // depth of node, 0 is base level, pos inf is small, neg inf is big
-            byte pos;
-            /*
-             * _______
-             * |00|01|
-             * |__|__|
-             * |10|11|
-             * |__|__|
-             */ 
-
-            // vars used for sim
-            public byte[] FindNeighbor(byte direct)
+            public Node FindNodeFromRef(Node n, byte[] add)
             {
-                switch (direct)
+
+                // finds a node relitive to another
+                for (int i = 0; i < add.Length; i++)
                 {
-                    //case
+                    if (n.p == null)
+                        return null; // address is invalid
+                    n = n.p;
+                } // goes up to perent
+                for (int i = 0; i < add.Length; i++)
+                {
+                    n = n.c[add[i]];
                 }
-                return null;
+                return n;
             }
-            public bool[][] FindNeighbors()
+
+            public Node CreateNodeTree()
             {
-                // use finite state macine
-                // top left 0x0
-                // top right 0x1
-                // bottom left 0x2
-                // bottom right 0x3
+                Node n = new Node();
+                Node q;
 
-                byte[][] neigh;
+                for (int a = 0; a < 4; a++) {
+                    q = new Node();
+                    n.c[a] = q;
+                    q.p = n;
+                    q.pos = (byte)a;
+                    for (int b = 0; b < 4; b++)
+                    {
+                        q = new Node();
+                        n.c[a].c[b] = q;
+                        q.p = n.c[a];
+                        q.pos = (byte)b;
+                        for (int c = 0; c < 4; c++)
+                        {
+                            q = new Node();
+                            n.c[a].c[b].c[c] = q;
+                            q.p = n.c[a].c[b] ;
+                            q.pos = (byte)c;
+                        }
+                    }
+                }
 
-                switch (pos)
-                {
-                    case 0x0: // top left
-
-
-                        break;
-                    case 0x01: // top right
-
-                        break;
-                    case 0x2: // bottom left
-
-                        break;
-                    case 0x3: // top right
-
-                        break;
-                } 
-                return null;
-            }
+                return n;
+            } // debug
             public Node()
             {
-                // write neighbors
+                c = new Node[4];
             }
         }
-        public Node baseNode;
-        public void CreateParentNode(Node n, int corner)
-        {
-              
-            /*
-             * function is used to expand the tree
-             * a larger node will be created above n, and all requirement 
-             * to make a quadtree will be met
-             * corner
-             * in accordance to http://www.lcad.icmc.usp.br/~jbatista/procimg/quadtree_neighbours.pdf
-             *
-             * n is the old father node
-             * p is new father node
-             * n is now child of p
-             */
-
-            if (n.p != null)
-                return; // only should becalled on father nodes
-            if (n.r - 1 < _MINDEPTH)
-                return; // do not go below min depth
-
-            Node p = new Node();
-
-            p.r = n.r - 1; // set depth
-            currnetDepth = p.r;
-            p.c = new Node[4];
-
-            for (int i = 0; i < p.c.Length; i++)
-            {
-                if (i == corner)
-                {
-                    p.c[i] = n;
-                    // if the corner lines up with the node, set that child to n
-                }
-                else
-                {
-                    p.c[i] = new Node();
-                    // is the corner is not the one defined make a new node
-                }
-                p.c[i].r = n.r;
-                // set depth of new father node's children to the same as the node being slip
-            }
-            n.p = p;
-
-
-        }
-        public QuadTreeh()
-        {
-            baseNode = new Node();
-            baseNode.r = 0;
-        }
-
-        public void Expand()
-        {
-            //run func on all nodes with r = 0;
-        }
-        public void Simulate(ref Node n)
-        {
-            //simluates sigle node
-            Debug.Log("glizzy");
-        }
-        
-
-    }
-
+    } // haha refactor 
 }
+   
