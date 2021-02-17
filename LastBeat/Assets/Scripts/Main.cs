@@ -16,9 +16,9 @@ public class Main : MonoBehaviour
         e = n.c[1].c[2].c[2];
         for (byte i = 0x0; i != 0x8; i +=0x1)
         {
-          
+            QuadTree.Node fuck = e.FindNeighbor(i);
         }
-        QuadTree.Node fuck = e.FindNeighbor(0x1);
+        
 
     }
 
