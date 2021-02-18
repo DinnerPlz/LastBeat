@@ -59,17 +59,24 @@ namespace Trees
             public int r; // depth
             public byte pos; // gives relitive position 
 
+
+            // prefomance shit
+            
             public Node FindNeighbor(byte direction)
             {
-                byte[] code = new byte[currentDepth];
-                Node n; // curent node, default is this
-                byte d = direction;
-                n = this;
+                byte[] code;
+                Node n = this; ;
+                byte d;
+
+                code = new byte[currentDepth];
+                d = direction; 
 
                 int i = 0;
-                while (n.p != null)
+                while (true)
                 {
                     code[i] = quadLookUp[(n.pos << 3) + d];
+                    if (n.p.p == null)
+                        break;
                     d = quadLookUp[(n.pos << 3) + d + 1];
                     if (d == 0xff)
                         break;

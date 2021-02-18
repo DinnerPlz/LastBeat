@@ -38,12 +38,12 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Stopwatch w = new Stopwatch();
+        Stopwatch w = new Stopwatch();
 
         deltaTime += Time.deltaTime;
         deltaTime /= 2.0f;
         fps = 1.0f / deltaTime;
-        //w.Start();
+        w.Start();
 
         for (int u = 0; u < 1000; u++)
         {
@@ -64,7 +64,7 @@ public class Main : MonoBehaviour
         }
         t.text = fps.ToString();
 
-        //w.Stop();
+        w.Stop();
 
 
         /*
@@ -85,6 +85,6 @@ public class Main : MonoBehaviour
 
         w.Stop();
         */
-        //UnityEngine.Debug.Log(w.ElapsedMilliseconds + " ms");
+        UnityEngine.Debug.Log(w.ElapsedMilliseconds + " ms");
     }
 }
