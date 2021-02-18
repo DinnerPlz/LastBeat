@@ -11,13 +11,29 @@ namespace Trees
     public class QuadTree
     {
         const int _MAXDEPTH = 100;
-        static public int currentDepth;
-        public static byte[,,] quadLookUp = new byte[,,] {
+        static public int currentDepth = 3;
+
+        public static byte[] quadLookUp = new byte[] {
+            0x1, 0xff ,0x1, 0x1 ,0x2, 0xff ,0x2, 0x3 ,
+            0x0, 0x0 ,0x0, 0xff ,0x3, 0xff ,0x3, 0x3 ,
+            0x3, 0xff ,0x3, 0x1 ,0x0, 0x2 ,0x0, 0xff ,
+            0x2, 0x0 ,0x2, 0xff ,0x1, 0x2 ,0x1, 0xff
+        }; // pos 0x3
+
+        public static byte[,,] quadLookUp2 = new byte[,,] {
+            {{0x1, 0xff },{0x1, 0x1 },{0x2, 0xff },{0x2, 0x3 }},
+            {{0x0, 0x0 },{0x0, 0xff },{0x3, 0xff },{0x3, 0x3 }},
+            {{0x3, 0xff },{0x3, 0x1 },{0x0, 0x2 },{0x0, 0xff }},
+            {{0x2, 0x0 },{0x2, 0xff },{0x1, 0x2 },{0x1, 0xff }}
+        }; // pos 0x3
+        /*
+        public static byte[,,] quadLookUp1 = new byte[,,] {
             {{0x1, 0xff },{0x1, 0x1 },{0x2, 0xff },{0x2, 0x3 },{0x3, 0x3 },{0x3, 0xff },{0x3, 0x1 },{0x3, 0x7 }},
             {{0x0, 0x0 },{0x0, 0xff },{0x3, 0xff },{0x3, 0x3 },{0x2, 0x4 },{0x2, 0xff },{0x2, 0xff},{0x2, 0x1 }},
             {{0x3, 0xff },{0x3, 0x1 },{0x0, 0x2 },{0x0, 0xff },{0x1, 0xff },{0x1, 0x2 },{0x1, 0x6 },{0x1, 0x0 }},
             {{0x2, 0x0 },{0x2, 0xff },{0x1, 0x2 },{0x1, 0xff },{0x0, 0x0 },{0x0, 0x5 },{0x0, 0x2 },{0x0, 0xff }}
-        }; // pos 0x3
+        }; // backup
+        */
         /*
          * R, L, D, U, RU, RD, LD, LU
          * 0xff for halt
@@ -45,28 +61,23 @@ namespace Trees
 
             public Node FindNeighbor(byte direction)
             {
-                List<byte> code = new List<byte>();
+                byte[] code = new byte[currentDepth];
                 Node n; // curent node, default is this
                 byte d = direction;
                 n = this;
 
+                int i = 0;
                 while (n.p != null)
                 {
-                    code.Add(quadLookUp[n.pos, d, 0]);
-                    d = quadLookUp[n.pos, d, 1];
+                    code[i] = quadLookUp[(n.pos << 3) + d];
+                    d = quadLookUp[(n.pos << 3) + d + 1];
                     if (d == 0xff)
                         break;
                     n = n.p;
+                    i++;
                     
                 }
-
-                string e = "";
-                for (int i = 0; i < code.Count; i ++)
-                {
-                    e = e + " " + code[i];
-                }
-                Debug.Log(e);
-                n = FindNodeFromRef(this, code.ToArray());
+                //n = FindNodeFromRef(this, code.ToArray());
 
                 return n;
             }
