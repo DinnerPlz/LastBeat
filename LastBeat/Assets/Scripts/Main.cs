@@ -23,6 +23,8 @@ public class Main : MonoBehaviour
 
     QuadTree.Node n;
     QuadTree.Node e;
+
+    public List<float> avgRunTime = new List<float>();
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +41,7 @@ public class Main : MonoBehaviour
     void Update()
     {
         Stopwatch w = new Stopwatch();
-
+        /*
         deltaTime += Time.deltaTime;
         deltaTime /= 2.0f;
         fps = 1.0f / deltaTime;
@@ -65,12 +67,18 @@ public class Main : MonoBehaviour
         t.text = fps.ToString();
 
         w.Stop();
+        */
+
+            
 
 
-        /*
+        
         w.Start();
-
+        
         byte b1;
+
+        byte[] add0 = new byte[5];
+        byte pos = 0x3;
 
         for (int i = 0; i < 256000; i++)
         {
@@ -78,13 +86,39 @@ public class Main : MonoBehaviour
             {
                 for (int q = 0; q < 4; q++)
                 {
-                    b1 = quadLookUp[u * 8 + q + 1];
+                    add0[0] = (byte)(pos == 0x0 ? 0x1 : pos == 0x1 ? 0x0 : pos == 0x2 ? 0x3 : 0x2);
+                    add0[1] = add0[0];
+                    add0[2] = (byte)(pos == 0x0 ? 0x2 : pos == 0x1 ? 0x3 : pos == 0x2 ? 0x0 : 0x1);
+                    add0[3] = add0[1];
                 }
             }
         }
-
+        
+        
+        
+        
         w.Stop();
-        */
-        UnityEngine.Debug.Log(w.ElapsedMilliseconds + " ms");
+
+
+        avgRunTime.Add(w.ElapsedMilliseconds);
+
+        if (avgRunTime.Count != 1000 )
+           return;
+
+        float time = 0;
+        {
+            foreach(float i in avgRunTime)
+            {
+                if (i > 150)
+                    continue;
+                time += i;
+
+            }
+            time /= avgRunTime.Count;
+        }
+
+
+        UnityEngine.Debug.Log(time.ToString() + " ms " + avgRunTime.Count) ;
+        w.Reset();
     }
 }
