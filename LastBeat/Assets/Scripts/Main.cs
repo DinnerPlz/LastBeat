@@ -57,13 +57,12 @@ public class Main : MonoBehaviour
                     {
 
                         e = n.c[a].c[b].c[c];
-                        /*
+                        
                         for (byte i = 0x0; i != 0x4; i += 0x1)
                         {
                             QuadTree.Node fuck = e.FindNeighbor(i);
                         }
-                        */
-                        QuadTree.Node[] fuck = e.FindNeighborP();
+                        
                     }
                 }
             }

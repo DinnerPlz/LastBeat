@@ -10,7 +10,7 @@ namespace Trees
 {
     public class QuadTree
     {
-        const int _MAXDEPTH = 100;
+        //const int _MAXDEPTH = 100;
         static public int currentDepth = 3;
 
         public readonly byte[] quadLookUp2 = new byte[] {
@@ -208,8 +208,10 @@ namespace Trees
 
             public Node CreateNodeTree()
             {
-                Node n = new Node();
-                n.isFather = true;
+                Node n = new Node
+                {
+                    isFather = true
+                };
                 Node q;
 
                 for (int a = 0; a < 4; a++) {
