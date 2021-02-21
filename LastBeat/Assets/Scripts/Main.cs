@@ -41,7 +41,7 @@ public class Main : MonoBehaviour
     void Update()
     {
         Stopwatch w = new Stopwatch();
-        /*
+        
         deltaTime += Time.deltaTime;
         deltaTime /= 2.0f;
         fps = 1.0f / deltaTime;
@@ -55,11 +55,15 @@ public class Main : MonoBehaviour
                 {
                     for (int c = 0; c < 4; c++)
                     {
+
                         e = n.c[a].c[b].c[c];
+                        /*
                         for (byte i = 0x0; i != 0x4; i += 0x1)
                         {
                             QuadTree.Node fuck = e.FindNeighbor(i);
                         }
+                        */
+                        QuadTree.Node[] fuck = e.FindNeighborP();
                     }
                 }
             }
@@ -67,12 +71,12 @@ public class Main : MonoBehaviour
         t.text = fps.ToString();
 
         w.Stop();
-        */
+        
 
             
 
 
-        
+        /*
         w.Start();
         
         byte b1;
@@ -93,6 +97,7 @@ public class Main : MonoBehaviour
                 }
             }
         }
+        */
         
         
         
@@ -102,7 +107,7 @@ public class Main : MonoBehaviour
 
         avgRunTime.Add(w.ElapsedMilliseconds);
 
-        if (avgRunTime.Count != 1000 )
+        if (avgRunTime.Count != 200 )
            return;
 
         float time = 0;
