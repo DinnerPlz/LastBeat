@@ -47,6 +47,7 @@ public class Main : MonoBehaviour
         fps = 1.0f / deltaTime;
         w.Start();
 
+        UnityEngine.Debug.Log(n.ChildNodeCount());
         for (int u = 0; u < 1000; u++)
         {
             for (int a = 0; a < 4; a++)

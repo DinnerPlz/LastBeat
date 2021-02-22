@@ -91,103 +91,8 @@ namespace Trees
 
                 return n;
             }
-            /*
-            public Node[] FindNeighborP()
-            {
-                Node[] neighbors = new Node[4] { null, null, null, null}; // working on addreses currently
-
-
-                byte[] add0 = new byte[currentDepth];
-                byte[] add1 = new byte[currentDepth];
-                byte[] add2 = new byte[currentDepth];
-                byte[] add3 = new byte[currentDepth];
-
-                //  R, L , U, D
-
-                Node n0 = this;
-                Node n1;
-                Node n2;
-                Node n3;
-
-                
-                public readonly static byte[] quadLookUp = new byte[] {
-                    0x1, 0xff ,0x1, 0x1 ,0x2, 0xff ,0x2, 0x3 ,
-                    0x0, 0x0 ,0x0, 0xff ,0x3, 0xff ,0x3, 0x3 ,
-                    0x3, 0xff ,0x3, 0x1 ,0x0, 0x2 ,0x0, 0xff ,
-                    0x2, 0x0 ,0x2, 0xff ,0x1, 0x2 ,0x1, 0xff 
-                    }; // pos 0x3
-                    
-                switch (pos)
-                {
-                    case 0x0:
-                        add0[0] = 0x1;
-                        add1[0] = 0x1;
-                        add2[0] = 0x2;
-                        add3[0] = 0x2;
-                        break;
-                    case 0x1:
-                        add0[0] = 0x0;
-                        add1[0] = 0x0;
-                        add2[0] = 0x3;
-                        add3[0] = 0x3;
-                        break;
-                    case 0x2:
-                        add0[0] = 0x3;
-                        add1[0] = 0x3;
-                        add2[0] = 0x0;
-                        add3[0] = 0x0;
-                        break;
-                    case 0x3:
-                        add0[0] = 0x2;
-                        add1[0] = 0x2;
-                        add2[0] = 0x1;
-                        add3[0] = 0x1;
-                        break;
-                }
-                switch (pos) // only two neighbors need further prossesing
-                {
-                    case 0x0:
-                        proccessAdd(ref add2, pos, 0x1);
-                        proccessAdd(ref add3, pos, 0x3);
-                        break;
-                    case 0x1:
-                        proccessAdd(ref add0, pos, 0x0);
-                        proccessAdd(ref add3, pos, 0x3);
-                        break;
-                    case 0x2:
-                        proccessAdd(ref add1, pos, 0x1);
-                        proccessAdd(ref add2, pos, 0x2);
-                        break;
-                    case 0x3:
-                        proccessAdd(ref add0, pos, 0x0);
-                        proccessAdd(ref add2, pos, 0x2);
-                        break;
-                }
-                
-
-                return neighbors;
-            } // parallelization for fing neighbor
-            public void proccessAdd(ref byte[] add, byte pos, byte direction)
-            {
-                Node n = this.p; // perent because the first byte is already proccesed
-                byte d;
-                d = add[0];
-
-                int i = 1;
-                while (true)
-                {
-                    add[i] = quadLookUp[(n.pos << 3) + d];
-                    if (n.p.isFather == true)
-                        break;
-                    d = quadLookUp[(n.pos << 3) + d + 1];
-                    if (d == 0xff)
-                        break;
-                    n = n.p;
-                    i++;
-
-                }
-            }
-            */ // was slower :\
+            
+            
 
             public Node FindNodeFromRef(Node n, byte[] add)
             {
@@ -241,6 +146,74 @@ namespace Trees
             {
                 c = new Node[4];
             }
+            public void ExpandQuadtree(byte direc)
+            {
+                
+            }
+            public NodeS ToNodeS()
+            {
+                return new NodeS
+                {
+                    r = this.r,
+                    pos = this.pos,
+                    isFather = this.isFather
+                };
+            }
+            public int ChildNodeCount()
+            {
+                
+                if (this.c[0] == null)
+                    return 1;
+                int e = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    e += c[i].ChildNodeCount();
+                }
+                e++;
+                return e;
+            } // gets the amount of nodes under this one
+        }
+        public struct NodeS
+        {
+            public int p; // index of p
+            public int c0; // index of children
+            public int c1; // index of children
+            public int c2; // index of children
+            public int c3; // index of children
+            public int r;
+            public int pos;
+            public bool isFather;
+        } // a struct respresentaion of the Node class
+        public ComputeBuffer NodeTreeToBuffer(Node n)
+        {
+            unsafe
+            {
+                int count = n.ChildNodeCount();
+                ComputeBuffer ret = new ComputeBuffer(count, sizeof(NodeS));
+
+                NodeS[] arr = new NodeS[count];
+                arr = computeOrder(arr, 0, n);
+                arr[0] = n.ToNodeS();
+                
+                 
+
+                return ret;
+            }
+        }
+        public NodeS[] computeOrder(NodeS[] arr, int i, Node n)
+        {
+            for(int u = 0; u < arr.Length; u++)
+            {
+                if (arr[u].c0 != 0)
+                    continue;
+
+
+            }
+            computeOrder(arr, i + 1, n.c[0]);
+        }
+        public QuadTree BufferToNodeTree()
+        {
+            return null;
         }
     } // haha refactor 
 }
