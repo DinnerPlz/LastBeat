@@ -173,13 +173,10 @@ namespace Trees
                 return e;
             } // gets the amount of nodes under this one
         }
-        public struct NodeS
+        public unsafe struct NodeS
         {
             public int p; // index of p
-            public int c0; // index of children
-            public int c1; // index of children
-            public int c2; // index of children
-            public int c3; // index of children
+            public fixed int c[4];
             public int r;
             public int pos;
             public bool isFather;
@@ -200,16 +197,17 @@ namespace Trees
                 return ret;
             }
         }
-        public NodeS[] computeOrder(NodeS[] arr, int i, Node n)
+        public unsafe NodeS[] computeOrder(NodeS[] arr, int i, Node n)
         {
             for(int u = 0; u < arr.Length; u++)
             {
-                if (arr[u].c0 != 0)
+                if (arr[u].c[0] != 0)
                     continue;
-
-
+                for (int y = 0; y < 4; y++)
+                {
+                    arr[u + y] = n.c[y].ToNodeS();
+                }
             }
-            computeOrder(arr, i + 1, n.c[0]);
         }
         public QuadTree BufferToNodeTree()
         {
