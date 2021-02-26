@@ -124,18 +124,21 @@ namespace Trees
                     n.c[a] = q;
                     q.p = n;
                     q.pos = (byte)a;
+                    q.r = 1;
                     for (int b = 0; b < 4; b++)
                     {
                         q = new Node();
                         n.c[a].c[b] = q;
                         q.p = n.c[a];
                         q.pos = (byte)b;
+                        q.r = 2;
                         for (int c = 0; c < 4; c++)
                         {
                             q = new Node();
                             n.c[a].c[b].c[c] = q;
                             q.p = n.c[a].c[b] ;
                             q.pos = (byte)c;
+                            q.r = 3;
                         }
                     }
                 }
@@ -172,6 +175,24 @@ namespace Trees
                 e++;
                 return e;
             } // gets the amount of nodes under this one
+            public void GetPos()
+            {
+                // janky shit
+                Vector3 vec = new Vector3(0, 0, 1);
+
+                Node f = this;
+                int i = (int)math.pow(2, (currentDepth - r)); // depth 
+                while (true)
+                {
+                    if (f.p == null)
+                        break;
+                    vec += new Vector3(i * (f.pos & 0x1), i * (f.pos & 0x2));
+                    f = f.p;
+                    i *= 2;
+                }
+                Gizmos.DrawWireCube(vec, new Vector3(Mathf.Pow(2,currentDepth - r) /2 , Mathf.Pow(2, currentDepth - r)/ 2 , 10-r));
+            }
+            
         }
         public unsafe struct NodeS
         {
@@ -205,9 +226,13 @@ namespace Trees
                     continue;
                 for (int y = 0; y < 4; y++)
                 {
-                    arr[u + y] = n.c[y].ToNodeS();
+                    NodeS node = n.c[y].ToNodeS();
+                    node.p = i;
+                    arr[u + y] = node; // set child
+                    
                 }
             }
+            return null;
         }
         public QuadTree BufferToNodeTree()
         {
