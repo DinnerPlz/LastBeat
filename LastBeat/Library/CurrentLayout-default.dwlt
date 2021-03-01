@@ -166,10 +166,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 479, y: 242}
-  m_MaxSize: {x: 12004, y: 8042}
+  m_MinSize: {x: 478, y: 242}
+  m_MaxSize: {x: 12003, y: 8042}
   vertical: 0
-  controlID: 87
+  controlID: 18
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -613,9 +613,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 3.8675206, y: 3.0779104, z: 0.28710938}
+    m_Target: {x: 3.7139542, y: 2.9127629, z: -1.2923818}
     speed: 2
-    m_Value: {x: 3.8675206, y: 3.0779104, z: 0.28710938}
+    m_Value: {x: 3.7139542, y: 2.9127629, z: -1.2923818}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -665,9 +665,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 4.7180014
+    m_Target: 3.8678453
     speed: 2
-    m_Value: 4.7180014
+    m_Value: 3.8678453
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -685,7 +685,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.06325424, y: -0.020360373, z: 0.0012907563, w: -0.99778897}
+  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
@@ -715,7 +715,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 743
-    width: 1343
+    width: 1309
     height: 256
   m_ViewDataDictionary: {fileID: 0}
   m_SearchFilter:
@@ -744,7 +744,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 7c390000
     m_LastClickedID: 14716
-    m_ExpandedIDs: 000000006e390000
+    m_ExpandedIDs: 000000006e39000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -799,7 +799,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000664c00000e5900004a560000903b0000443d0000ba3c0000143700002a340000fe42000066370000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

@@ -12,8 +12,8 @@ public class Main : MonoBehaviour
             0x1, 0xff ,0x1, 0x1 ,0x2, 0xff ,0x2, 0x3 ,
             0x0, 0x0 ,0x0, 0xff ,0x3, 0xff ,0x3, 0x3 ,
             0x3, 0xff ,0x3, 0x1 ,0x0, 0x2 ,0x0, 0xff ,
-            0x2, 0x0 ,0x2, 0xff ,0x1, 0x2 ,0x1, 0xff 
-        }; // pos 0x3
+            0x2, 0x0 ,0x2, 0xff ,0x1, 0x2 ,0x1, 0xff
+    }; // pos 0x3
 
     public Text t;
 
@@ -24,7 +24,8 @@ public class Main : MonoBehaviour
 
     Node n;
     Node e;
-
+    [Range(0,3)
+        ]
     public int f, g, h;
 
     public List<float> avgRunTime = new List<float>();
@@ -122,7 +123,6 @@ public class Main : MonoBehaviour
                 {
                     
                     Gizmos.color = new Color(0,0,(float)((int)c * 64) / 255);
-                    UnityEngine.Debug.Log((float)((int)c * 64) / 255);
                     n.c[a].c[b].c[c].GetPos(false);
                     i++;
                 }
@@ -134,8 +134,25 @@ public class Main : MonoBehaviour
         j.GetPos(true);
         for (byte e = 0x0; e < 0x4; e++)
         {
-            Gizmos.color = new Color((e * 64) / 255, 0, 0);
-            Node k = j.FindNeighbor(e);
+
+            switch (e)
+            {
+                case 0x0:
+                    Gizmos.color = Color.green;
+                    break;
+                case 0x1:
+                    Gizmos.color = Color.blue;
+                    break;
+                case 0x2:
+                    Gizmos.color = Color.black;
+                    break;
+                case 0x3:
+                    Gizmos.color = Color.cyan;
+                    break;
+            }
+            UnityEngine.Debug.Log(((float)e * 64) / 255);
+            UnityEngine.Debug.Log(e + " //////////////////////////////////////////");
+            Node k = j.FindNeighborO(e);
             if (k != null)
                 k.GetPos(true);
         }

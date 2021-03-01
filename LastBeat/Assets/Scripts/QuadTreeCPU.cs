@@ -28,6 +28,13 @@ namespace Trees
             0x2, 0x0 ,0x2, 0xff ,0x1, 0x2 ,0x1, 0xff 
         }; // pos 0x3
 
+        public static byte[,,] quadLookUpO = new byte[,,] {
+            {{0x1, 0xff },{0x1, 0x1 },{0x2, 0xff },{0x2, 0x3 },{0x3, 0x3 },{0x3, 0xff },{0x3, 0x1 },{0x3, 0x7 }},
+            {{0x0, 0x0 },{0x0, 0xff },{0x3, 0xff },{0x3, 0x3 },{0x2, 0x4 },{0x2, 0xff },{0x2, 0xff},{0x2, 0x3 }},
+            {{0x3, 0xff },{0x3, 0x1 },{0x0, 0x2 },{0x0, 0xff },{0x1, 0xff },{0x1, 0x2 },{0x1, 0x6 },{0x1, 0x0 }},
+            {{0x2, 0x0 },{0x2, 0xff },{0x1, 0x2 },{0x1, 0xff },{0x0, 0x0 },{0x0, 0x5 },{0x0, 0x2 },{0x0, 0xff }}
+        };
+
         /*
         public static byte[,,] quadLookUp1 = new byte[,,] {
             {{0x1, 0xff },{0x1, 0x1 },{0x2, 0xff },{0x2, 0x3 },{0x3, 0x3 },{0x3, 0xff },{0x3, 0x1 },{0x3, 0x7 }},
@@ -74,6 +81,7 @@ namespace Trees
                 code = new byte[currentDepth];
                 d = direction; 
 
+
                 int i = 0;
                 while (true)
                 {
@@ -91,12 +99,31 @@ namespace Trees
 
                 return n;
             }
-            
-            
+            public Node FindNeighborO(byte direct)
+            {
+                List<byte> code = new List<byte>();
+                Node n; // curent node, default is this
+                byte d = direct;
+                n = this;
+                while (n.p != null)
+                {
+                    //case
+                    code.Add(quadLookUpO[n.pos, d, 0]);
+                    d = quadLookUpO[n.pos, d, 1];
+                    if (d == 0xff)
+                        break;
+                    n = n.p;
+
+                }
+                return FindNodeFromRef(this, code.ToArray());
+
+            }
 
             public Node FindNodeFromRef(Node n, byte[] add)
             {
-
+                Array.Reverse(add);
+                
+                
                 // finds a node relitive to another
                 for (int i = 0; i < add.Length; i++)
                 {
@@ -104,8 +131,17 @@ namespace Trees
                         return null; // address is invalid
                     n = n.p;
                 } // goes up to perent
+
+                string addString = "";
+                foreach (byte part in add)
+                {
+                    addString += " " + (int)part;
+                }
+                Debug.Log(addString);
                 return n;
-            }
+
+                
+            } // i think this is broken
 
             public Node CreateNodeTree()
             {
