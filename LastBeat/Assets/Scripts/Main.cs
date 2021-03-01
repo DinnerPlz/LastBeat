@@ -25,6 +25,8 @@ public class Main : MonoBehaviour
     Node n;
     Node e;
 
+    public int f, g, h;
+
     public List<float> avgRunTime = new List<float>();
     // Start is called before the first frame update
     void Start()
@@ -107,23 +109,35 @@ public class Main : MonoBehaviour
         n = new Node();
         n = n.CreateNodeTree(); // might work
         int i = 0;
+        n.GetPos(false);
         // throwaway function for drawing tree
         for (int a = 0; a < 4; a++) {
-            Gizmos.color = new Color(255, 0, 0);
-            n.c[a].GetPos();
+            Gizmos.color = new Color((float)(a*64)/255, 0, 0);
+            n.c[a].GetPos(false);
             for (int b = 0; b < 4; b++)
             {
-                Gizmos.color = new Color(0, 0,0 );
-                n.c[a].c[b].GetPos();
+                Gizmos.color = new Color(0, (float)(b * 64) / 255, 0);
+                n.c[a].c[b].GetPos(false);
                 for (int c = 0; c < 4; c++)
                 {
                     
-                    Gizmos.color = new Color((float)(a * 64) / 255, (float)(b * 64) / 255, (float)(c * 64) / 255);
-                    UnityEngine.Debug.Log((float)(i * 4) / 255);
-                    n.c[a].c[b].c[c].GetPos();
+                    Gizmos.color = new Color(0,0,(float)((int)c * 64) / 255);
+                    UnityEngine.Debug.Log((float)((int)c * 64) / 255);
+                    n.c[a].c[b].c[c].GetPos(false);
                     i++;
                 }
             }
+        }
+
+        Node j = n.c[f].c[g].c[h];
+        Gizmos.color = Color.white;
+        j.GetPos(true);
+        for (byte e = 0x0; e < 0x4; e++)
+        {
+            Gizmos.color = new Color((e * 64) / 255, 0, 0);
+            Node k = j.FindNeighbor(e);
+            if (k != null)
+                k.GetPos(true);
         }
     }
 }

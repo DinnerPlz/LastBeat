@@ -87,7 +87,7 @@ namespace Trees
                     i++;
                     
                 }
-                //n = FindNodeFromRef(this, code.ToArray());
+                n = FindNodeFromRef(this, code);
 
                 return n;
             }
@@ -104,10 +104,6 @@ namespace Trees
                         return null; // address is invalid
                     n = n.p;
                 } // goes up to perent
-                for (int i = 0; i < add.Length; i++)
-                {
-                    n = n.c[add[i]];
-                }
                 return n;
             }
 
@@ -175,7 +171,7 @@ namespace Trees
                 e++;
                 return e;
             } // gets the amount of nodes under this one
-            public void GetPos()
+            public void GetPos(bool sphere)
             {
                 // janky shit
                 Vector3 vec = new Vector3(0, 0, 1);
@@ -190,7 +186,15 @@ namespace Trees
                     f = f.p;
                     i *= 2;
                 }
-                Gizmos.DrawWireCube(vec, new Vector3(Mathf.Pow(2,currentDepth - r) /2 , Mathf.Pow(2, currentDepth - r)/ 2 , 10-r));
+                vec = new Vector3(vec.x, vec.y / 2);
+                if(sphere)
+                {
+                    Gizmos.DrawSphere(vec, 0.25f);
+                }
+                else {
+
+                    Gizmos.DrawWireCube(vec, new Vector3(Mathf.Pow(2, currentDepth - r) / 2, Mathf.Pow(2, currentDepth - r) / 2, 10 - r));
+                }
             }
             
         }
