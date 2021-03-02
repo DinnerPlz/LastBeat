@@ -44,6 +44,12 @@ namespace Trees
         }; // backup
         */
         /*
+         * 
+         * 
+         * 
+         * 
+         * .
+         * 
          * R, L, D, U, RU, RD, LD, LU
          * 0xff for halt
          * kinda supposed to be recursive(idk)
@@ -95,6 +101,7 @@ namespace Trees
                     i++;
                     
                 }
+                code[i] = 0xff; // return marker
                 n = FindNodeFromRef(this, code);
 
                 return n;
@@ -115,29 +122,35 @@ namespace Trees
                     n = n.p;
 
                 }
+                code.Add(0xff);
                 return FindNodeFromRef(this, code.ToArray());
 
             }
 
             public Node FindNodeFromRef(Node n, byte[] add)
             {
-                Array.Reverse(add);
-                
-                
-                // finds a node relitive to another
-                for (int i = 0; i < add.Length; i++)
+
+
+                int i = 0;
+                while (true)
                 {
-                    if (n.p == null)
-                        return null; // address is invalid
+                    //Debug.Log(i);
+                    if (add[i] == 0xff)
+                        break;
+                    if (n.isFather == true)
+                        break;
                     n = n.p;
-                } // goes up to perent
+                    i++;
+                }
+                
+                
 
                 string addString = "";
                 foreach (byte part in add)
                 {
                     addString += " " + (int)part;
                 }
-                Debug.Log(addString);
+                //Debug.Log(addString);
                 return n;
 
                 

@@ -28,6 +28,7 @@ public class Main : MonoBehaviour
         ]
     public int f, g, h;
 
+
     public List<float> avgRunTime = new List<float>();
     // Start is called before the first frame update
     void Start()
@@ -42,10 +43,11 @@ public class Main : MonoBehaviour
     }
 
     // Update is called once per frame
+    /*
     void Update()
     {
         Stopwatch w = new Stopwatch();
-        /*
+        
         deltaTime += Time.deltaTime;
         deltaTime /= 2.0f;
         fps = 1.0f / deltaTime;
@@ -76,7 +78,7 @@ public class Main : MonoBehaviour
 
         w.Stop();
         
-        */
+        
         
         
         
@@ -104,6 +106,7 @@ public class Main : MonoBehaviour
         UnityEngine.Debug.Log(time.ToString() + " ms " + avgRunTime.Count) ;
         w.Reset();
     }
+    */
     private void OnDrawGizmos()
     {
 
@@ -150,9 +153,14 @@ public class Main : MonoBehaviour
                     Gizmos.color = Color.cyan;
                     break;
             }
-            UnityEngine.Debug.Log(((float)e * 64) / 255);
             UnityEngine.Debug.Log(e + " //////////////////////////////////////////");
-            Node k = j.FindNeighborO(e);
+            Node k;
+            
+            
+            k = j.FindNeighborO(e);
+            
+            
+
             if (k != null)
                 k.GetPos(true);
         }
