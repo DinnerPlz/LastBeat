@@ -1,6 +1,8 @@
 ﻿#define DEBUG
 
 using System;
+using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 
 namespace QuadTreeUnity
@@ -95,7 +97,9 @@ namespace QuadTreeUnity
         }
     } // garbage
     */
-    unsafe public class QuadTree
+
+    
+    public class QuadTree
     {
         /*
          * This is the second attempt to make a quad tree
@@ -122,6 +126,10 @@ namespace QuadTreeUnity
          * negitive being larger than the base node
          * A father node is a node with no perents
          *
+         * 
+         * 
+         * 
+         *  EDIT: after further consideration it was decided that 
          */
 
         /*
@@ -142,6 +150,10 @@ namespace QuadTreeUnity
             
         }
         */
+        const int _MAXDEPTH = 30; // devisons will not go further than r = 20
+        const int _MINDEPTH = -30; // no nodes with a depth smaller will be made
+        // total depth = 60, 60^4 tiles possible,  12,960,000
+
         public class Node
         {
             
@@ -161,10 +173,6 @@ namespace QuadTreeUnity
         
         }
         public Node baseNode;
-        unsafe void SplitNode()
-        {
-            // adds child nodes 
-        }
         public void CreateParentNode(Node n, int corner)
         {
             // function is used to expand the tree
@@ -183,6 +191,8 @@ namespace QuadTreeUnity
 
             if (n.p != null)
                 return; // only should becalled on father nodes
+            if (n.r - 1 < _MINDEPTH)
+                return; // do not go below min depth
 
             Node p = new Node();
 
@@ -261,7 +271,7 @@ namespace QuadTreeUnity
                 qt.CreateParentNode(e, 0);
 
                 e = e.p;
-                //Console.WriteLine(e.r);
+                Console.WriteLine(e.r);
 
             }
         }
