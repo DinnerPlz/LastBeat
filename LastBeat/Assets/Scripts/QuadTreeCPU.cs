@@ -130,27 +130,28 @@ namespace Trees
             public Node FindNodeFromRef(Node n, byte[] add)
             {
 
-
+                string addString = "";
                 int i = 0;
+                n = n.p;
                 while (true)
                 {
                     //Debug.Log(i);
-                    if (add[i] == 0xff)
+                    if (add[i + 1] == 0xff)
                         break;
                     if (n.isFather == true)
                         break;
                     n = n.p;
                     i++;
-                }
-                
-                
-
-                string addString = "";
-                foreach (byte part in add)
+                } // goto perent
+               
+                while (i >= 0)
                 {
-                    addString += " " + (int)part;
+                    addString += add[i].ToString();
+                    n = n.c[add[i]];
+                    
+                    i--;
                 }
-                //Debug.Log(addString);
+                
                 return n;
 
                 
@@ -220,7 +221,7 @@ namespace Trees
                 e++;
                 return e;
             } // gets the amount of nodes under this one
-            public void GetPos(bool sphere)
+            public void GetPos(bool sphere, float offSet)
             {
                 // janky shit
                 Vector3 vec = new Vector3(0, 0, 1);
@@ -238,7 +239,7 @@ namespace Trees
                 vec = new Vector3(vec.x, vec.y / 2);
                 if(sphere)
                 {
-                    Gizmos.DrawSphere(vec, 0.25f);
+                    Gizmos.DrawSphere(vec + new Vector3(0,0,offSet*2) , 0.25f - offSet/4);
                 }
                 else {
 
