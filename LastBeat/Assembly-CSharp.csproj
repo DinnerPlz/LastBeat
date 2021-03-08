@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\LogisticCalculator.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
+    <Compile Include="Assets\Scripts\QuadTree.cs" />
     <Compile Include="Assets\Scripts\QuadTreeCPU.cs" />
     <Compile Include="Assets\Scripts\SpellSystem.cs" />
     <None Include="Assets\SpellParticleManager.compute" />
