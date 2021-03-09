@@ -492,9 +492,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   t: {fileID: 1137678661}
-  f: 0
-  g: 0
-  h: 0
+  f: 1
+  g: 2
+  h: 3
+  depth: 4
   avgRunTime: []
 --- !u!4 &1571650705
 Transform:

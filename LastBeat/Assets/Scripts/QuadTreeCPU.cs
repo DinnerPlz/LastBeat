@@ -19,7 +19,6 @@ namespace Trees
             0x3, 0xff ,0x3, 0x1, 0x0,
             0x2, 0x0 ,0x2, 0xff, 0x1
         }; // pos 0x3
-        
 
         public readonly static byte[] quadLookUp = new byte[] {
             0x1, 0xff ,0x1, 0x1 ,0x2, 0xff ,0x2, 0x3 ,
@@ -170,21 +169,21 @@ namespace Trees
                     n.c[a] = q;
                     q.p = n;
                     q.pos = (byte)a;
-                    q.r = 1;
+                    q.r = -1;
                     for (int b = 0; b < 4; b++)
                     {
                         q = new Node();
                         n.c[a].c[b] = q;
                         q.p = n.c[a];
                         q.pos = (byte)b;
-                        q.r = 2;
+                        q.r = 0;
                         for (int c = 0; c < 4; c++)
                         {
                             q = new Node();
                             n.c[a].c[b].c[c] = q;
                             q.p = n.c[a].c[b] ;
                             q.pos = (byte)c;
-                            q.r = 3;
+                            q.r = 1;
                         }
                     }
                 }

@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Trees;
-using static Trees.QuadTree;
+using static QuadTree.QuadTree;
 using UnityEngine.UI;
 
 public class Main : MonoBehaviour
@@ -22,96 +21,53 @@ public class Main : MonoBehaviour
 
 
     Node n;
-    Node e;
     [Range(0,3)
         ]
     public int f, g, h;
-
+    [Range(0, 100)
+        ]
+    public int depth;
 
     public List<float> avgRunTime = new List<float>();
     // Start is called before the first frame update
     void Start()
     {
-        n = new Node();
-        n = n.CreateNodeTree(); // might work
 
-        
-        
-        
+
+        n = new Node
+        {
+            isFather = true
+        };
+        //n = n.CreateNodeTree(); // does  work
+        //n = n.CreateNodeTree(depth, 0, null);
+        n.SplitNode();
+        n.Expand(0x0);
+        n = n.p;
+        n.Expand(0x0);
+        n = n.p;
+        n.Expand(0x0);
+        n = n.p;
+
 
     }
 
-    // Update is called once per frame
-    /*
-    void Update()
-    {
-        Stopwatch w = new Stopwatch();
-        
-        deltaTime += Time.deltaTime;
-        deltaTime /= 2.0f;
-        fps = 1.0f / deltaTime;
-        w.Start();
-
-        UnityEngine.Debug.Log(n.ChildNodeCount());
-        for (int u = 0; u < 1000; u++)
-        {
-            for (int a = 0; a < 4; a++)
-            {
-                for (int b = 0; b < 4; b++)
-                {
-                    for (int c = 0; c < 4; c++)
-                    {
-
-                        e = n.c[a].c[b].c[c];
-                        
-                        for (byte i = 0x0; i != 0x4; i += 0x1)
-                        {
-                            Node fuck = e.FindNeighbor(i);
-                        }
-                        
-                    }
-                }
-            }
-        }
-        t.text = fps.ToString();
-
-        w.Stop();
-        
-        
-        
-        
-        
-        w.Stop();
-
-
-        avgRunTime.Add(w.ElapsedMilliseconds);
-
-        if (avgRunTime.Count != 200 )
-           return;
-
-        float time = 0;
-        {
-            foreach(float i in avgRunTime)
-            {
-                if (i > 150)
-                    continue;
-                time += i;
-
-            }
-            time /= avgRunTime.Count;
-        }
-
-
-        UnityEngine.Debug.Log(time.ToString() + " ms " + avgRunTime.Count) ;
-        w.Reset();
-    }
-    */
     private void OnDrawGizmos()
     {
 
+
+
+        
+
+
         n = new Node();
-        n = n.CreateNodeTree(); // might work
+        //n = n.CreateNodeTree(); // does  work
+         n = n.CreateNodeTree(depth, 0 , null);
+        //n.Expand(0x1);
+
         int i = 0;
+        Debug.Log(n.ChildNodeCount());
+        n.DrawTree();
+        /*
         n.GetPos(false, 0);
         // throwaway function for drawing tree
         for (int a = 0; a < 4; a++) {
@@ -130,7 +86,8 @@ public class Main : MonoBehaviour
                 }
             }
         }
-
+        */
+        /*
         Node j = n.c[f].c[g].c[h];
         Gizmos.color = Color.white;
         j.GetPos(true, -0.25f);
@@ -162,5 +119,7 @@ public class Main : MonoBehaviour
             if (k != null)
                 k.GetPos(true, (float)e * 0.1f );
         }
+        */
     }
+    
 }
