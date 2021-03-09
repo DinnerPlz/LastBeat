@@ -33,13 +33,13 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
-LastBeat/[Ll]ibrary/
-LastBeat/[Tt]emp/
-LastBeat/[Oo]bj/
-LastBeat/[Bb]uild/
-LastBeat/[Bb]uilds/
-LastBeat/[Ll]ogs/
-LastBeat/[Uu]ser[Ss]ettings/
+/LastBeat/[Ll]ibrary/
+/LastBeat/[Tt]emp/
+/LastBeat/[Oo]bj/
+/LastBeat/[Bb]uild/
+/LastBeat/[Bb]uilds/
+/LastBeat/[Ll]ogs/
+/LastBeat/[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
