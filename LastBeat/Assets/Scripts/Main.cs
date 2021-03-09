@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Trees;
 using static QuadTree.QuadTree;
 using UnityEngine.UI;
 
@@ -22,7 +21,6 @@ public class Main : MonoBehaviour
 
 
     Node n;
-    Node e;
     [Range(0,3)
         ]
     public int f, g, h;
@@ -34,26 +32,38 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        n = new Node();
+
+
+        n = new Node
+        {
+            isFather = true
+        };
         //n = n.CreateNodeTree(); // does  work
-        n = n.CreateNodeTree(depth, 0, null);
-
-
-
+        //n = n.CreateNodeTree(depth, 0, null);
+        n.SplitNode();
+        n.Expand(0x0);
+        n = n.p;
+        n.Expand(0x0);
+        n = n.p;
+        n.Expand(0x0);
+        n = n.p;
 
 
     }
 
     private void OnDrawGizmos()
     {
+
+
+
         
 
-       
-        
+
         n = new Node();
         //n = n.CreateNodeTree(); // does  work
-        n = n.CreateNodeTree(depth, 0 , null);
-        
+         n = n.CreateNodeTree(depth, 0 , null);
+        //n.Expand(0x1);
+
         int i = 0;
         Debug.Log(n.ChildNodeCount());
         n.DrawTree();
@@ -77,7 +87,7 @@ public class Main : MonoBehaviour
             }
         }
         */
-
+        /*
         Node j = n.c[f].c[g].c[h];
         Gizmos.color = Color.white;
         j.GetPos(true, -0.25f);
@@ -109,6 +119,7 @@ public class Main : MonoBehaviour
             if (k != null)
                 k.GetPos(true, (float)e * 0.1f );
         }
-        
+        */
     }
+    
 }

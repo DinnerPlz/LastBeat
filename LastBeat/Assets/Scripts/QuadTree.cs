@@ -9,7 +9,7 @@ namespace QuadTree
 {
     public class QuadTree
     {
-        static public int currentDepth = 3;
+        static public int currentDepth = 0;
 
         public readonly byte[] quadLookUp2 = new byte[] {
             0x1, 0xff ,0x1, 0x1, 0x2,
@@ -55,6 +55,7 @@ namespace QuadTree
             {
                 if (isFather == false)
                     return; // dont expand if perent exists
+                Debug.Log("e" + isFather);
                 p = new Node(); // make pernet
                 for (int i = 0; i < 4; i++)
                 {
@@ -121,11 +122,15 @@ namespace QuadTree
 
 
                 if (n == null)
+                {
                     n = new Node
                     {
                         isFather = true,
-                        depth = -20
+                        depth = 0
                     };
+                    currentDepth = -id; // i think, i should test this
+                }
+                    
 
 
 
@@ -186,20 +191,29 @@ namespace QuadTree
                 e++;
                 return e;
             } // gets the amount of nodes under this one
+            public Texture2D RenderToTexture2D()
+            {
+                int tSize = this.depth ; // total size
+                int length = currentDepth * currentDepth; // side length
+                Texture2D tex = new Texture2D(length, length);
+                return tex;
+            }
             public Node()
             {
                 c = new Node[4];
             }
         } // main node class
-        
+        public class Compute
+        {
+            public class Execute
+            {
+
+            } // 
+        }
         public unsafe struct NodeS
         {
 
         } // struct version of node, for compute buffers
 
-        public class Compute
-        {
-
-        } // funcitons for dispatching shader
     }
 }
