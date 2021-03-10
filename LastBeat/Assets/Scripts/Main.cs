@@ -13,19 +13,15 @@ public class Main : MonoBehaviour
             0x2, 0x0 ,0x2, 0xff ,0x1, 0x2 ,0x1, 0xff
     }; // pos 0x3
 
-    public Text t;
 
 
-    float deltaTime = 0.0f;
-    float fps = 0.0f;
-
+    public bool reBuildTree;
+    
 
     Node n;
-    [Range(0,3)
-        ]
+    [Range(0,3) ]
     public int f, g, h;
-    [Range(0, 100)
-        ]
+    [Range(0, 100)]
     public int depth;
 
     public List<float> avgRunTime = new List<float>();
@@ -40,15 +36,20 @@ public class Main : MonoBehaviour
         };
         //n = n.CreateNodeTree(); // does  work
         //n = n.CreateNodeTree(depth, 0, null);
-        n.SplitNode();
-        n.Expand(0x0);
-        n = n.p;
-        n.Expand(0x0);
-        n = n.p;
-        n.Expand(0x0);
-        n = n.p;
+        //n = n.CreateNodeTree(depth, 0, null);
 
-
+        n = new Node();
+        n = n.CreateNodeTree(depth, 0, null);
+    }
+    private void Update()
+    {
+        if(reBuildTree)
+        {
+            n = new Node();
+            n = n.CreateNodeTree(depth, 0, null);
+            reBuildTree = false;
+        }
+        n.RenderToTexture2D();
     }
 
     private void OnDrawGizmos()
@@ -61,12 +62,12 @@ public class Main : MonoBehaviour
 
         n = new Node();
         //n = n.CreateNodeTree(); // does  work
-         n = n.CreateNodeTree(depth, 0 , null);
+         //n = n.CreateNodeTree(depth, 0 , null);
         //n.Expand(0x1);
 
         int i = 0;
-        Debug.Log(n.ChildNodeCount());
-        n.DrawTree();
+        
+        //n.DrawTree();
         /*
         n.GetPos(false, 0);
         // throwaway function for drawing tree

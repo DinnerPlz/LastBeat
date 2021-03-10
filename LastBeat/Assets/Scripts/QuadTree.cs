@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
+using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEngine.UI;
+using System;
 
 // this is a a remake of QuadTreeCpu cuz it was shit
 // just comments and organizational stuff
@@ -50,12 +53,13 @@ namespace QuadTree
                     c[i].p = this;
                     c[i].pos = (byte)i;
                 }
+                if (c[0].depth > currentDepth)
+                    currentDepth = c[0].depth;
             }
             public void Expand(byte newPos)
             {
                 if (isFather == false)
                     return; // dont expand if perent exists
-                Debug.Log("e" + isFather);
                 p = new Node(); // make pernet
                 for (int i = 0; i < 4; i++)
                 {
@@ -67,10 +71,10 @@ namespace QuadTree
                 p.depth = depth - 1;
                 p.isFather = true;
                 isFather = false;
-                currentDepth += 1;
+                //currentDepth += 1;
 
             } // creates a perent node, with the existing node at position NewPos withing the perents children
-            public Node FindNeighborO(byte direct)
+            private Node FindNeighborO(byte direct)
             {
                 // workes using a FSM
                 List<byte> code = new List<byte>();
@@ -92,7 +96,7 @@ namespace QuadTree
 
             } // the original function FindNEighbor does not work
             // dont feel like fixing rn
-            public Node FindNodeFromRef(Node n, byte[] add)
+            private Node FindNodeFromRef(Node n, byte[] add)
             {
                 int i = 0;
                 n = n.p; // i dont know why this is nessisary
@@ -152,7 +156,7 @@ namespace QuadTree
                     c[i].DrawTree();
                 }
             } // draw tree using gizmos
-            public void GetPos(bool sphere, float offSet)
+            private void GetPos(bool sphere, float offSet)
             {
                 // janky shit
                 Vector3 vec = new Vector3(0, 0, 1);
@@ -193,9 +197,44 @@ namespace QuadTree
             } // gets the amount of nodes under this one
             public Texture2D RenderToTexture2D()
             {
-                int tSize = this.depth ; // total size
-                int length = currentDepth * currentDepth; // side length
+                // function assumes full quadtree rn
+                int tSize = -depth + currentDepth; // total depth
+                int length = tSize * tSize; // side length
                 Texture2D tex = new Texture2D(length, length);
+
+                byte[] add = new byte[tSize]; // used for addressing
+
+                // recurse thorugh tree and output image
+                RenderRecurse(tex, add, 0); // beging recusion at id = 0
+
+                tex.Apply(); // apply changes make to textue
+
+
+
+                return tex;
+            }
+            public Texture2D RenderRecurse(Texture2D tex, byte[] add, int id)
+            {
+                id++; //increment id
+
+                //double e = Math.Sqrt(1356);
+
+                // the address is only used at the end of the tree to get a postion
+                if(c[0] == null)
+                {
+                    //some code to convert addresss to abs value
+
+                } // set some sort of color
+                else
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        add[id] = (byte)i; // further address for next recurese
+                        c[i].RenderRecurse(tex, add, id);
+                    } // recurse
+                } // go further down tree
+                
+
                 return tex;
             }
             public Node()
