@@ -13,7 +13,7 @@ public class Main : MonoBehaviour
             0x2, 0x0 ,0x2, 0xff ,0x1, 0x2 ,0x1, 0xff
     }; // pos 0x3
 
-
+    public Texture2D tex;
 
     public bool reBuildTree;
     
@@ -49,7 +49,7 @@ public class Main : MonoBehaviour
             n = n.CreateNodeTree(depth, 0, null);
             reBuildTree = false;
         }
-        n.RenderToTexture2D();
+        tex = n.RenderToTexture2D();
     }
 
     private void OnDrawGizmos()
