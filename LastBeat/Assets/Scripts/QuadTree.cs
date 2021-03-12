@@ -198,10 +198,9 @@ namespace QuadTree
             public Texture2D RenderToTexture2D()
             {
                 // function assumes full quadtree rn
-                int tSize = -depth + currentDepth; // total depth idk why -1 needs to be there
-                int length = tSize * tSize; // side length
-                //Texture2D tex = new Texture2D(length, length);
-                Texture2D tex = new Texture2D(16, 16); // test, remove this
+                int tSize = -depth + currentDepth; // total depth idk 
+                int length = (int)Mathf.Pow(2, tSize - 1);// side length
+                Texture2D tex = new Texture2D(length, length);
                 tex.filterMode = FilterMode.Point;
 
                 byte[] add = new byte[tSize]; // used for addressing
@@ -224,24 +223,27 @@ namespace QuadTree
                 // the address is only used at the end of the tree to get a postion
                 if(c[0] == null)
                 {
+                    for (byte i = 0; i < 0x4; i ++)
+                    {
 
+                        FindNeighborO(i);
+                    }
                     
                     int x = 0; // pos
                     int y = 0; // pos
-                    Color32 col = new Color32();
-                    for (int i = add.Length; i > 0; i--)
+                    Color col = new Color();
+                    for (int i = add.Length - 1; i > 0; i--)
                     {
-                        
-                        x += (add[i - 1] & 0x1) << (i - 1);
-                        y += (add[i - 1] & 0x2) << (i - 1);
-                        Debug.Log(string.Format("{0}, {1}, {2}, {3}", i -1, add[i-1], add[i - 1] & 0x1, (add[i - 1] & 0x1) << (i-1), x));
+                        x += (add[i] & 0x1) << (i - 0);
+                        y += (add[i] & 0x2) << (i - 1);
+                        //y += i == 1 && ((add[i] & 0x2) == 0x2) ? 1 : 0;
+                        // for whatever reason on the last ideration the y spot is weirdly iterated
+                        // i think this is because the (i - 2) bit shift only works above the final node
+
 
                     } //some code to convert addresss to abs value
-                    col.r = (byte)(x / 16 * 256);
-                    col.b = (byte)(y / 16 * 256);
-                    Debug.Log(string.Format("{0} {1}", x, y));
-  
 
+  
                     tex.SetPixel(x, y, col);
                     return tex;
 

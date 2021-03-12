@@ -50,6 +50,7 @@ public class Main : MonoBehaviour
             reBuildTree = false;
         }
         tex = n.RenderToTexture2D();
+        tex.Apply();
     }
 
     private void OnDrawGizmos()
