@@ -90,11 +90,15 @@ namespace QuadTree
                     n = n.p;
                 }
                 code.Add(0xff); // make sure that the code ends
-                                // this is mostly just a safty so infine recurtion doesnt happen
+                                // this is mostly just a saefty so infine recurtion doesnt happen
 
                 return FindNodeFromRef(this, code.ToArray());
 
             } // the original function FindNEighbor does not work
+            private Node FindNeighbor()
+            {
+                // optimizations, lists are very slow
+            } // remove lists and use lower D array for FSM
             // dont feel like fixing rn
             private Node FindNodeFromRef(Node n, byte[] add)
             {
