@@ -217,9 +217,8 @@ namespace QuadTree
 
                     } //some code to convert addresss to abs value
 
-                    col.r = (byte)(x / 16 * 256);
-                    col.b = (byte)(y / 16 * 256);
-                    Debug.Log(string.Format("{0} {1}", x, y));
+                    col.r = x & 0x1;
+                    col.g = y & 0x2;
                     Debug.Log(rock[0]);
                         
 
