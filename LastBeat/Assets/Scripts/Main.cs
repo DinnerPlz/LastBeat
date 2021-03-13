@@ -16,7 +16,7 @@ public class Main : MonoBehaviour
     public Texture2D tex;
 
     public bool reBuildTree;
-    
+    public bool step;
 
     Node n;
     [Range(0,3) ]
@@ -48,9 +48,23 @@ public class Main : MonoBehaviour
             n = new Node();
             n = n.CreateNodeTree(depth, 0, null);
             reBuildTree = false;
+            Node DownTree = new Node();
+            while(true)
+            {
+                if (DownTree.c[0] == null)
+                    break;
+                DownTree = DownTree.c[1];
+            }
+            DownTree.rock = new bool[] { true, true };
+            Debug.Log(DownTree.rock[0]);
         }
-        tex = n.RenderToTexture2D();
-        tex.Apply();
+        if(step)
+        {
+            tex = n.RenderToTexture2D();
+            tex.Apply();
+            step = false;
+        }
+        
     }
 
     private void OnDrawGizmos()

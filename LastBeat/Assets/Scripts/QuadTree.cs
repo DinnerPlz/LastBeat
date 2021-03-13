@@ -44,6 +44,14 @@ namespace QuadTree
             public int depth;
             public int pos; // relitive position of node compared to perent
             public bool isFather; // if the node has perent, faster than p == null
+
+            public bool[] rock = new bool[2];
+            // [Buffer one] [Buffer two]
+
+            public bool buff; 
+            // if false read from buffer one, and write to buffer two
+            // if true read from buffer two, and write to buffer one
+
             public void SplitNode()
             {
                 for(int i = 0; i < 4; i++)
@@ -74,29 +82,26 @@ namespace QuadTree
                 //currentDepth += 1;
 
             } // creates a perent node, with the existing node at position NewPos withing the perents children
-            private Node FindNeighborO(byte direct)
+            
+            private Node FindNeighbor(byte direct)
             {
-                // workes using a FSM
-                List<byte> code = new List<byte>();
+                byte[] code = new byte[100]; // this number needs to be generated in feauter
                 Node n; // a "pointer" for the nodes
                 byte d = direct;
                 n = this;
+                int i = 0;
                 while (n.p != null)
                 {
-                    code.Add(quadLookUpO[n.pos, d, 0]);
+                    code[i] = quadLookUpO[n.pos, d, 0];
                     d = quadLookUpO[n.pos, d, 1];
                     if (d == 0xff)
                         break;
                     n = n.p;
+                    i++;
                 }
-                code.Add(0xff); // make sure that the code ends
-                                // this is mostly just a saefty so infine recurtion doesnt happen
+                
 
-                return FindNodeFromRef(this, code.ToArray());
-
-            } // the original function FindNEighbor does not work
-            private Node FindNeighbor()
-            {
+                return null;
                 // optimizations, lists are very slow
             } // remove lists and use lower D array for FSM
             // dont feel like fixing rn
@@ -150,42 +155,6 @@ namespace QuadTree
 
                 return n;
             } // recursivly make tree
-            public void DrawTree ()
-            {
-                GetPos(false, 0);
-                if (c[1] == null)
-                    return;
-                for (int i = 0; i < 4; i ++)
-                {
-                    c[i].DrawTree();
-                }
-            } // draw tree using gizmos (slow asf)
-            private void GetPos(bool sphere, float offSet)
-            {
-                // janky shit
-                Vector3 vec = new Vector3(0, 0, 1);
-
-                Node f = this;
-                int i = (int)math.pow(2, (currentDepth - depth)); // depth 
-                while (true)
-                {
-                    if (f.p == null)
-                        break;
-                    vec += new Vector3(i * (f.pos & 0x1), i * (f.pos & 0x2));
-                    f = f.p;
-                    i *= 2;
-                }
-                vec = new Vector3(vec.x, vec.y / 2);
-                if (sphere)
-                {
-                    Gizmos.DrawSphere(vec + new Vector3(0, 0, offSet * 2), 0.25f - offSet / 4);
-                }
-                else
-                {
-
-                    Gizmos.DrawWireCube(vec, new Vector3(Mathf.Pow(2, currentDepth - depth) / 2, Mathf.Pow(2, currentDepth - depth) / 2, 10 - depth));
-                }
-            } // visualization for debug (shity code)
             public int ChildNodeCount()
             {
 
@@ -227,10 +196,11 @@ namespace QuadTree
                 // the address is only used at the end of the tree to get a postion
                 if(c[0] == null)
                 {
+                    Node[] neighbors = new Node[4];
                     for (byte i = 0; i < 0x4; i ++)
                     {
 
-                        FindNeighborO(i);
+                        neighbors[i] = FindNeighbor(i);
                     }
                     
                     int x = 0; // pos
@@ -238,7 +208,7 @@ namespace QuadTree
                     Color col = new Color();
                     for (int i = add.Length - 1; i > 0; i--)
                     {
-                        x += (add[i] & 0x1) << (i - 0);
+                        x += (add[i] & 0x1) << (i - 1);
                         y += (add[i] & 0x2) << (i - 1);
                         //y += i == 1 && ((add[i] & 0x2) == 0x2) ? 1 : 0;
                         // for whatever reason on the last ideration the y spot is weirdly iterated
@@ -247,7 +217,15 @@ namespace QuadTree
 
                     } //some code to convert addresss to abs value
 
-  
+                    col.r = x & 0x1;
+                    col.g = y & 0x2;
+                    Debug.Log(rock[0]);
+                        
+
+                    // copute shit
+
+                    buff = !buff; // swap buffer
+
                     tex.SetPixel(x, y, col);
                     return tex;
 
@@ -268,6 +246,65 @@ namespace QuadTree
             {
                 c = new Node[4];
             }
+
+            public void DrawTree()
+            {
+                GetPos(false, 0);
+                if (c[1] == null)
+                    return;
+                for (int i = 0; i < 4; i++)
+                {
+                    c[i].DrawTree();
+                }
+            } // draw tree using gizmos (slow asf)
+            private void GetPos(bool sphere, float offSet)
+            {
+                // janky shit
+                Vector3 vec = new Vector3(0, 0, 1);
+
+                Node f = this;
+                int i = (int)math.pow(2, (currentDepth - depth)); // depth 
+                while (true)
+                {
+                    if (f.p == null)
+                        break;
+                    vec += new Vector3(i * (f.pos & 0x1), i * (f.pos & 0x2));
+                    f = f.p;
+                    i *= 2;
+                }
+                vec = new Vector3(vec.x, vec.y / 2);
+                if (sphere)
+                {
+                    Gizmos.DrawSphere(vec + new Vector3(0, 0, offSet * 2), 0.25f - offSet / 4);
+                }
+                else
+                {
+
+                    Gizmos.DrawWireCube(vec, new Vector3(Mathf.Pow(2, currentDepth - depth) / 2, Mathf.Pow(2, currentDepth - depth) / 2, 10 - depth));
+                }
+            } // visualization for debug (shity code)
+            private Node FindNeighborO(byte direct)
+            {
+                // workes using a FSM
+                List<byte> code = new List<byte>();
+                Node n; // a "pointer" for the nodes
+                byte d = direct;
+                n = this;
+                while (n.p != null)
+                {
+                    code.Add(quadLookUpO[n.pos, d, 0]);
+                    d = quadLookUpO[n.pos, d, 1];
+                    if (d == 0xff)
+                        break;
+                    n = n.p;
+                }
+                code.Add(0xff); // make sure that the code ends
+                                // this is mostly just a saefty so infine recurtion doesnt happen
+
+                return FindNodeFromRef(this, code.ToArray());
+
+            } // the original function FindNEighbor does not work
+
         } // main node class
         public class Compute
         {
