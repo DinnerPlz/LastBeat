@@ -48,9 +48,11 @@ namespace QuadTree
             public bool[] rock = new bool[2];
             // [Buffer one] [Buffer two]
 
-            public bool buff; 
-            // if false read from buffer one, and write to buffer two
-            // if true read from buffer two, and write to buffer one
+            Color col;
+
+            public int buff; 
+            // if 0 read from buffer one, and write to buffer two
+            // if 1 read from buffer two, and write to buffer one
 
             public void SplitNode()
             {
@@ -170,20 +172,39 @@ namespace QuadTree
             } // gets the amount of nodes under this one
             public Texture2D RenderToTexture2D()
             {
+                //Debug.Log(buff);
                 // function assumes full quadtree rn
                 int tSize = -depth + currentDepth; // total depth idk 
-                int length = (int)Mathf.Pow(2, tSize - 1);// side length
-                Texture2D tex = new Texture2D(length, length);
+                int length = (int)Mathf.Pow(2, tSize );// side length
+                int e = length;
+                Texture2D tex = new Texture2D(length,length);
                 tex.filterMode = FilterMode.Point;
+                tex.alphaIsTransparency = false;
+
+                tex.Apply();
+                //tex.SetPixel(0, 0, new Color(1, 1, 1, 1));
+                tex.Apply();
+                Debug.Log(tex.GetPixel(0, 0).a);
 
                 byte[] add = new byte[tSize]; // used for addressing
 
                 // recurse thorugh tree and output image
                 RenderRecurse(tex, add, 0); // beging recusion at id = 0
 
+                
+
                 tex.Apply(); // apply changes make to textue
-
-
+                //Debug.Log(buff);
+                if (buff == 0)
+                {
+                    //Debug.Log("e");
+                    buff = 1;
+                }
+                else
+                {
+                    buff = 0;
+                }
+                //Debug.Log(buff);
 
                 return tex;
             }
@@ -194,38 +215,42 @@ namespace QuadTree
                 //double e = Math.Sqrt(1356);
 
                 // the address is only used at the end of the tree to get a postion
-                if(c[0] == null)
+                if (c[0] == null)
                 {
                     Node[] neighbors = new Node[4];
-                    for (byte i = 0; i < 0x4; i ++)
+                    for (byte i = 0; i < 0x4; i++)
                     {
+                        neighbors[i] = FindNeighborO(i);
+                        if(rock[buff])
+                        {
 
-                        neighbors[i] = FindNeighbor(i);
+                            neighbors[i].col = Color.red;
+                        }
                     }
-                    
+
                     int x = 0; // pos
                     int y = 0; // pos
-                    Color col = new Color();
                     for (int i = add.Length - 1; i > 0; i--)
                     {
-                        x += (add[i] & 0x1) << (i - 1);
-                        y += (add[i] & 0x2) << (i - 1);
-                        //y += i == 1 && ((add[i] & 0x2) == 0x2) ? 1 : 0;
-                        // for whatever reason on the last ideration the y spot is weirdly iterated
-                        // i think this is because the (i - 2) bit shift only works above the final node
+                        x += (add[i] & 0x1) << (i + 0);
+                        y += (add[i] & 0x2) << (i - 1); //why -1? WHO FUCKING KNOWS
 
 
                     } //some code to convert addresss to abs value
 
-                    col.r = x & 0x1;
-                    col.g = y & 0x2;
-                    Debug.Log(rock[0]);
-                        
+
+                   // Debug.Log((x));
+
+
+                    col.a = 255;
+                    if (rock[buff])
+                        col = Color.black;
+
 
                     // copute shit
 
-                    buff = !buff; // swap buffer
 
+                    //Debug.Log(col.a);
                     tex.SetPixel(x, y, col);
                     return tex;
 

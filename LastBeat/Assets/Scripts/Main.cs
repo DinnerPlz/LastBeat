@@ -15,13 +15,14 @@ public class Main : MonoBehaviour
 
     public Texture2D tex;
 
-    public bool reBuildTree;
+
+
     public bool step;
 
     Node n;
     [Range(0,3) ]
     public int f, g, h;
-    [Range(0, 100)]
+    [Range(0, 10)]
     public int depth;
 
     public List<float> avgRunTime = new List<float>();
@@ -43,23 +44,18 @@ public class Main : MonoBehaviour
     }
     private void Update()
     {
-        if(reBuildTree)
+        
+        if(step)
         {
             n = new Node();
             n = n.CreateNodeTree(depth, 0, null);
-            reBuildTree = false;
-            Node DownTree = new Node();
-            while(true)
+
+            Node node = n;
+            for (int i = 0; i < depth-1; i ++)
             {
-                if (DownTree.c[0] == null)
-                    break;
-                DownTree = DownTree.c[1];
+                node = node.c[i % 4];
             }
-            DownTree.rock = new bool[] { true, true };
-            Debug.Log(DownTree.rock[0]);
-        }
-        if(step)
-        {
+            node.rock = new bool[] { true, true };
             tex = n.RenderToTexture2D();
             tex.Apply();
             step = false;
