@@ -7,6 +7,7 @@ using System;
 
 // this is a a remake of QuadTreeCpu cuz it was shit
 // just comments and organizational stuff
+// i pray to anyone who needs to read this code
 
 namespace QuadTree
 {
@@ -160,7 +161,7 @@ namespace QuadTree
             public int ChildNodeCount()
             {
 
-                if (this.c[0] == null)
+                if (c[0] == null)
                     return 1;
                 int e = 0;
                 for (int i = 0; i < 4; i++)
@@ -172,7 +173,6 @@ namespace QuadTree
             } // gets the amount of nodes under this one
             public Texture2D RenderToTexture2D()
             {
-                //Debug.Log(buff);
                 // function assumes full quadtree rn
                 int tSize = -depth + currentDepth; // total depth idk 
                 int length = (int)Mathf.Pow(2, tSize );// side length
@@ -181,10 +181,14 @@ namespace QuadTree
                 tex.filterMode = FilterMode.Point;
                 tex.alphaIsTransparency = false;
 
+                for (int x = 0; x < length; x++)
+                {
+                    for (int y = 0; y < length; y++)
+                    {
+                        tex.SetPixel(x, y, Color.white);
+                    }
+                }
                 tex.Apply();
-                //tex.SetPixel(0, 0, new Color(1, 1, 1, 1));
-                tex.Apply();
-                Debug.Log(tex.GetPixel(0, 0).a);
 
                 byte[] add = new byte[tSize]; // used for addressing
 
@@ -194,17 +198,14 @@ namespace QuadTree
                 
 
                 tex.Apply(); // apply changes make to textue
-                //Debug.Log(buff);
                 if (buff == 0)
                 {
-                    //Debug.Log("e");
                     buff = 1;
                 }
                 else
                 {
                     buff = 0;
                 }
-                //Debug.Log(buff);
 
                 return tex;
             }
@@ -214,22 +215,58 @@ namespace QuadTree
 
                 //double e = Math.Sqrt(1356);
 
+
                 // the address is only used at the end of the tree to get a postion
                 if (c[0] == null)
                 {
                     Node[] neighbors = new Node[4];
+
                     for (byte i = 0; i < 0x4; i++)
                     {
+
                         neighbors[i] = FindNeighborO(i);
                         if(rock[buff])
                         {
-
                             neighbors[i].col = Color.red;
+
+                            
+                           /* //neighbors[i].col = Color.magenta;
+                            if (pos != i)
+                            {
+                                p.c[i].col = Color.red;
+                                //Debug.Log(depth + " " + p.depth);
+                                Node req; // ussed for addressing
+                                req = p.c[i]; // p.c[i] reffers to brothers
+                                string str = ""; 
+                                while (true)
+                                {
+                                    str = req.pos + " " + str;
+                                    if (req.p == null)
+                                        break;
+                                    req = req.p;
+                                }
+                                Debug.Log(str);
+                            }*/
+                            
+
                         }
+                        
+
+
                     }
+                    if(col != Color.red)
+                    {
+                        //col = Color.white;
+                    } // caution hacky shit, fix later
 
                     int x = 0; // pos
                     int y = 0; // pos
+                    for(int i = 1; i < add.Length; i++)
+                    {
+
+                        x += (add[i] & 0x1) << (depth - i + 1);
+                        y += (add[i] & 0x2) << (depth - i ); //why -1? WHO FUCKING KNOWS
+                    }/*
                     for (int i = add.Length - 1; i > 0; i--)
                     {
                         x += (add[i] & 0x1) << (i + 0);
@@ -237,20 +274,20 @@ namespace QuadTree
 
 
                     } //some code to convert addresss to abs value
-
-
-                   // Debug.Log((x));
-
-
-                    col.a = 255;
+*/
+                    // col.a = 255;
                     if (rock[buff])
-                        col = Color.black;
+                    {
+                        col = Color.yellow;
+                    }
 
+                    //col.g = (x % 3) == 0 ? 1f : 0f;
+                    //col.b = (float)y / 32f;
+                        
 
                     // copute shit
 
-
-                    //Debug.Log(col.a);
+                    
                     tex.SetPixel(x, y, col);
                     return tex;
 
@@ -260,6 +297,11 @@ namespace QuadTree
                     for (int i = 0; i < 4; i++)
                     {
                         add[id] = (byte)i; // further address for next recurese
+
+                        if (i == 4)
+                        {
+                            Debug.Log(add);
+                        }
                         c[i].RenderRecurse(tex, add, id);
                     } // recurse
                 } // go further down tree

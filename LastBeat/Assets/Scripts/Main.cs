@@ -24,6 +24,9 @@ public class Main : MonoBehaviour
     public int f, g, h;
     [Range(0, 10)]
     public int depth;
+    
+    [Range(0, 3)]
+    public int[] pos;
 
     public List<float> avgRunTime = new List<float>();
     // Start is called before the first frame update
@@ -50,15 +53,16 @@ public class Main : MonoBehaviour
             n = new Node();
             n = n.CreateNodeTree(depth, 0, null);
 
+            
             Node node = n;
             for (int i = 0; i < depth-1; i ++)
             {
-                node = node.c[i % 4];
+                node = node.c[pos[i]];
             }
             node.rock = new bool[] { true, true };
             tex = n.RenderToTexture2D();
             tex.Apply();
-            step = false;
+            //step = false;
         }
         
     }
