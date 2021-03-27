@@ -24,6 +24,8 @@ public class Main : MonoBehaviour
     public int f, g, h;
     [Range(0, 10)]
     public int depth;
+
+    public int pDepth;
     
     [Range(0, 3)]
     public int[] pos;
@@ -50,9 +52,13 @@ public class Main : MonoBehaviour
         
         if(step)
         {
-            n = new Node();
-            n = n.CreateNodeTree(depth, 0, null);
-
+            //n = new Node();
+            //n = n.CreateNodeTree(depth, 0, null);
+            if(pDepth != depth)
+            {
+                pDepth = depth;
+                n = n.CreateNodeTree(depth, 0, null);
+            }
             
             Node node = n;
             for (int i = 0; i < depth-1; i ++)
@@ -67,75 +73,5 @@ public class Main : MonoBehaviour
         
     }
 
-    private void OnDrawGizmos()
-    {
-
-
-
-        
-
-
-        n = new Node();
-        //n = n.CreateNodeTree(); // does  work
-         //n = n.CreateNodeTree(depth, 0 , null);
-        //n.Expand(0x1);
-
-        int i = 0;
-        
-        //n.DrawTree();
-        /*
-        n.GetPos(false, 0);
-        // throwaway function for drawing tree
-        for (int a = 0; a < 4; a++) {
-            Gizmos.color = new Color((float)(a*64)/255, 0, 0);
-            n.c[a].GetPos(false, 0);
-            for (int b = 0; b < 4; b++)
-            {
-                Gizmos.color = new Color(0, (float)(b * 64) / 255, 0);
-                n.c[a].c[b].GetPos(false, 0);
-                for (int c = 0; c < 4; c++)
-                {
-                    
-                    Gizmos.color = new Color(0,0,(float)((int)c * 64) / 255);
-                    n.c[a].c[b].c[c].GetPos(false, 0);
-                    i++;
-                }
-            }
-        }
-        */
-        /*
-        Node j = n.c[f].c[g].c[h];
-        Gizmos.color = Color.white;
-        j.GetPos(true, -0.25f);
-        for (byte e = 0x0; e < 0x4; e++)
-        {
-
-            switch (e)
-            {
-                case 0x0:
-                    Gizmos.color = Color.green;
-                    break;
-                case 0x1:
-                    Gizmos.color = Color.blue;
-                    break;
-                case 0x2:
-                    Gizmos.color = Color.black;
-                    break;
-                case 0x3:
-                    Gizmos.color = Color.cyan;
-                    break;
-            }
-            Node k;
-            
-            
-            k = j.FindNeighborO(e);
-            
-            
-
-            if (k != null)
-                k.GetPos(true, (float)e * 0.1f );
-        }
-        */
-    }
     
 }
