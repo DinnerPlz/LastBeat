@@ -66,6 +66,7 @@ namespace Trees
          * 
          */
 
+
         public class Node
         {
             public Node p; // perent
@@ -125,7 +126,6 @@ namespace Trees
                 return FindNodeFromRef(this, code.ToArray());
 
             }
-
             public Node FindNodeFromRef(Node n, byte[] add)
             {
 
@@ -154,8 +154,7 @@ namespace Trees
                 return n;
 
                 
-            } // i think this is broken
-
+            } // i think this is broken 
             public Node CreateNodeTree()
             {
                 Node n = new Node
@@ -292,5 +291,6 @@ namespace Trees
             return null;
         }
     } // haha refactor 
+
 }
    

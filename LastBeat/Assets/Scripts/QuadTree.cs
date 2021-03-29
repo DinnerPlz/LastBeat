@@ -85,7 +85,6 @@ namespace QuadTree
                 //currentDepth += 1;
 
             } // creates a perent node, with the existing node at position NewPos withing the perents children
-            
             private Node FindNeighbor(byte direct)
             {
                 byte[] code = new byte[100]; // this number needs to be generated in feauter
@@ -410,5 +409,59 @@ namespace QuadTree
         } // struct version of node, for compute buffers
 
     }
-    
+    public unsafe class QuadTreePtr
+    {
+        public unsafe struct Node
+        {
+            // address are to be added to &Node
+
+            public fixed long c[4]; // childeren address
+            // i cant have an array of node* (sad)
+            // convert form long to void*:
+            // void* p = (void*)c[i];
+            // address 0, 8, 16, 24
+
+            public Node* p; //perent
+            // address 32
+
+            public int depth;
+            //address  40
+
+            public byte pos;
+            //address  44
+
+            public bool isFather;
+            //address  45
+
+
+
+        }
+        public class Generate
+        {
+            
+        }
+        public unsafe void Split(Node n)
+        {
+            Node[] childs = new Node[4];
+            fixed (void* arrayStart = &childs[0])
+            {
+                long add = (long)new IntPtr(arrayStart); // address of array start
+                for (int i = 0; i < 4; i++)
+                {
+                    childs[i] = new Node();
+                    childs[i].depth = n.depth + 1;
+                    childs[i].p = &n;
+                    childs[i].pos = (byte)i;
+
+
+                    n.c[i] = add + (i * sizeof(Node));
+                }
+            }
+            
+
+
+            
+        }
+
+    } // Quadtree except it uses pointes (kill me)
 }
