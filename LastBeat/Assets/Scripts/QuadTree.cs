@@ -440,7 +440,7 @@ namespace QuadTree
         {
             
         }
-        public unsafe void Split(Node n)
+        public unsafe void Split(Node* n)
         {
             Node[] childs = new Node[4];
             fixed (void* arrayStart = &childs[0])
@@ -449,17 +449,14 @@ namespace QuadTree
                 for (int i = 0; i < 4; i++)
                 {
                     childs[i] = new Node();
-                    childs[i].depth = n.depth + 1;
-                    childs[i].p = &n;
+                    childs[i].depth = n -> depth + 1;
+                    childs[i].p = n;
                     childs[i].pos = (byte)i;
 
 
-                    n.c[i] = add + (i * sizeof(Node));
+                    n -> c[i] = add + (i * sizeof(Node));
                 }
             }
-            
-
-
             
         }
 
