@@ -181,13 +181,6 @@ namespace QuadTree
                 tex.filterMode = FilterMode.Point;
                 
 
-                for (int x = 0; x < length; x++)
-                {
-                    for (int y = 0; y < length; y++)
-                    {
-                        tex.SetPixel(x, y, Color.white);
-                    }
-                }
                 tex.Apply();
 
                 byte[] add = new byte[tSize]; // used for addressing
@@ -195,8 +188,18 @@ namespace QuadTree
 
 
                 // recurse thorugh tree and output image
+                /*
                 RenderRecurse(tex, add, 0); // beging recusion at id = 0
-
+                */
+                byte[] edf = new byte[9];
+                for (int x = 0; x < length; x++)
+                {
+                    for(int y = 0; y < length; y++)
+                    {
+                        
+                        DrawNode(edf, ref tex);
+                    }
+                }
 
 
                 tex.Apply(); // apply changes make to textue
@@ -221,77 +224,80 @@ namespace QuadTree
                 // the address is only used at the end of the tree to get a postion
                 if (c[0] == null)
                 {
-                    ComputeNode();
 
                     DrawNode(add, ref tex);
 
                     return tex;
                     {
-                        Node[] neighbors = new Node[4];
-
-                        for (byte i = 0; i < 0x4; i++)
+                        /*
                         {
+                            Node[] neighbors = new Node[4];
 
-                            neighbors[i] = FindNeighborO(i);
-                            if (rock[buff])
+                            for (byte i = 0; i < 0x4; i++)
                             {
-                                neighbors[i].col = Color.red;
 
-
-                                //neighbors[i].col = Color.magenta;
-                                if (pos != i)
+                                neighbors[i] = FindNeighborO(i);
+                                if (rock[buff])
                                 {
-                                    p.c[i].col = Color.red;
-                                    //Debug.Log(depth + " " + p.depth);
-                                    Node req; // ussed for addressing
-                                    req = p.c[i]; // p.c[i] reffers to brothers
-                                    string str = "";
-                                    while (true)
+                                    neighbors[i].col = Color.red;
+
+
+                                    //neighbors[i].col = Color.magenta;
+                                    if (pos != i)
                                     {
-                                        str = req.pos + " " + str;
-                                        if (req.p == null)
-                                            break;
-                                        req = req.p;
+                                        p.c[i].col = Color.red;
+                                        //Debug.Log(depth + " " + p.depth);
+                                        Node req; // ussed for addressing
+                                        req = p.c[i]; // p.c[i] reffers to brothers
+                                        string str = "";
+                                        while (true)
+                                        {
+                                            str = req.pos + " " + str;
+                                            if (req.p == null)
+                                                break;
+                                            req = req.p;
+                                        }
+                                        Debug.Log(str);
                                     }
-                                    Debug.Log(str);
+
+
                                 }
 
 
+
+                            }
+                            if (col != Color.red)
+                            {
+                                col = Color.white;
+                            } // caution hacky shit, fix later
+
+                            int x = 0; // pos
+                            int y = 0; // pos
+                            for (int i = 1; i < add.Length; i++)
+                            {
+
+                                x += (add[i] & 0x1) << (depth - i + 1);//why 1? WHO FUCKING KNOWS
+                                y += (add[i] & 0x2) << (depth - i);
                             }
 
+                            // col.a = 255;
+                            if (rock[buff])
+                            {
+                                col = Color.yellow;
+                            }
+
+                            //col.g = (x % 3) == 0 ? 1f : 0f;
+                            //col.b = (float)y / 32f;
 
 
-                        }
-                        if (col != Color.red)
-                        {
-                            col = Color.white;
-                        } // caution hacky shit, fix later
-
-                        int x = 0; // pos
-                        int y = 0; // pos
-                        for (int i = 1; i < add.Length; i++)
-                        {
-
-                            x += (add[i] & 0x1) << (depth - i + 1);//why 1? WHO FUCKING KNOWS
-                            y += (add[i] & 0x2) << (depth - i);
-                        }
-
-                        // col.a = 255;
-                        if (rock[buff])
-                        {
-                            col = Color.yellow;
-                        }
-
-                        //col.g = (x % 3) == 0 ? 1f : 0f;
-                        //col.b = (float)y / 32f;
+                            // copute shit
 
 
-                        // copute shit
-
-
-                        tex.SetPixel(x, y, col);
-                        return tex;
-                    } // might need, not commenting tho cuz shit breaks
+                            tex.SetPixel(x, y, col);
+                            return tex;
+                        } // might need, not commenting tho cuz shit breaks
+                        */
+                    } // might need
 
                 } // set some sort of color
                 else
@@ -300,10 +306,7 @@ namespace QuadTree
                     {
                         add[id] = (byte)i; // further address for next recurese
 
-                        if (i == 4)
-                        {
-                            Debug.Log(add);
-                        }
+                        
                         c[i].RenderRecurse(tex, add, id);
                     } // recurse
                 } // go further down tree
@@ -311,26 +314,19 @@ namespace QuadTree
 
                 return tex;
             }
-            void ComputeNode()
-            {
-                
-                col.r = UnityEngine.Random.Range(0f,1f);
-                col.b = UnityEngine.Random.Range(0f,1f);
-                col.g = UnityEngine.Random.Range(0f,1f);
-                
-                //Debug.Log(col);
-            }
+            
             void DrawNode(byte[] add, ref Texture2D tex)
             {
                 int x = 0; // pos
                 int y = 0; // pos
-                for (int i = 1; i < add.Length; i++)
+                int length = add.Length;
+                for (int i = 1; i < length; i++)
                 {
 
                     x += (add[i] & 0x1) << (depth - i + 1);//why 1? WHO FUCKING KNOWS
                     y += (add[i] & 0x2) << (depth - i);
                 }
-                tex.SetPixel(x, y, col);
+                //tex.SetPixel(x, y, col);
             }
             public Node()
             {
