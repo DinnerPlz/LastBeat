@@ -46,6 +46,8 @@ public class Main : MonoBehaviour
 
         n = new Node();
         n = n.CreateNodeTree(depth, 0, null);
+
+        n.ToBuffer();
     }
     private void Update()
     {
