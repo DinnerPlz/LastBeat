@@ -1,0 +1,30 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+#include <noiseSimplex.cginc>
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+
+
+struct Pixel
+{
+    float fill;
+};
+
+RWTexture2D<float4> Result;
+RWTexture2D<int4> Data; // shit, cant be fucked to use this the proper way
+
+[numthreads(32,32,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+
+    float3 col;
+    col.r = (float) (id.x) / (float)256;
+    col.g = (float) (id.y) / (float)256;
+    col.b = 0;
+    
+    
+    
+    Result[id.xy] = float4(col.rbg , 1);
+}
