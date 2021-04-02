@@ -40,6 +40,8 @@ namespace QuadTree
 
         public class Node
         {
+
+
             public Node p; // the perent of node
             public Node[] c; // children
             public int depth;
@@ -188,18 +190,9 @@ namespace QuadTree
 
 
                 // recurse thorugh tree and output image
-                /*
+                
                 RenderRecurse(tex, add, 0); // beging recusion at id = 0
-                */
-                byte[] edf = new byte[9];
-                for (int x = 0; x < length; x++)
-                {
-                    for(int y = 0; y < length; y++)
-                    {
-                        
-                        DrawNode(edf, ref tex);
-                    }
-                }
+                
 
 
                 tex.Apply(); // apply changes make to textue
@@ -390,71 +383,79 @@ namespace QuadTree
                 return FindNodeFromRef(this, code.ToArray());
 
             } // the original function FindNEighbor does not work
+            
+            
+            public unsafe struct NodeS
+            {
+                public byte p; // address of p;
+                public fixed byte c[4]; // add of child, if 0 null (0 is the top node and should never be child)
+                public byte pos;
+                public float3 col; // guess
+
+            } // struct version of node, for compute buffers
+            public NodeS ToNodeS ()
+            {
+                NodeS ns = new NodeS();
+
+                ns.pos = (byte)pos;
+                ns.col = new float3(col.r, col.g, col.b);
+
+                return ns;
+            }
+            public unsafe ComputeBuffer ToBuffer()
+            {
+
+                ComputeBuffer buffer= new ComputeBuffer(256, sizeof(NodeS));
+
+                NodeS[] nodes = new NodeS[256]; // 256 is max size
+
+                ToArray(ref nodes, 0);
+
+                buffer.SetData(nodes);
+
+                string str = "";
+                foreach(NodeS ns in nodes)
+                {
+                    str += ns.p + " ";
+                }
+                Debug.Log(str);
+
+                return buffer;
+
+            }
+            public unsafe void ToArray(ref NodeS[] nodes, int id)
+            {
+                if (id >= 256)
+                    return;
+                NodeS ns = ToNodeS();
+                if (id != 0)
+                    ns.p = (byte)id; 
+                id++;
+                if (c[0] != null)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+
+                        ns.c[i] = (byte)id;
+                        c[i].ToArray(ref nodes, id);
+                    }
+                }
+
+                nodes[id] = ns;
+
+
+            } // more recurtion
 
         } // main node class
         public class Compute
         {
             public class Execute
             {
-
+                
             } // 
         }
-        public unsafe struct NodeS
-        {
-
-        } // struct version of node, for compute buffers
+        
 
     }
-    public unsafe class QuadTreePtr
-    {
-        public unsafe struct Node
-        {
-            // address are to be added to &Node
-
-            public fixed long c[4]; // childeren address
-            // i cant have an array of node* (sad)
-            // convert form long to void*:
-            // void* p = (void*)c[i];
-            // address 0, 8, 16, 24
-
-            public Node* p; //perent
-            // address 32
-
-            public int depth;
-            //address  40
-
-            public byte pos;
-            //address  44
-
-            public bool isFather;
-            //address  45
-
-
-
-        }
-        public class Generate
-        {
-            
-        }
-        public unsafe void Split(Node* n)
-        {
-            Node[] childs = new Node[4];
-            fixed (void* arrayStart = &childs[0])
-            {
-                long add = (long)new IntPtr(arrayStart); // address of array start
-                for (int i = 0; i < 4; i++)
-                {
-                    childs[i] = new Node();
-                    childs[i].depth = n -> depth + 1;
-                    childs[i].p = n;
-                    childs[i].pos = (byte)i;
-
-
-                    n -> c[i] = add + (i * sizeof(Node));
-                }
-            }
-            
-        }
-
-    } // Quadtree except it uses pointes (kill me)
+    
 }
