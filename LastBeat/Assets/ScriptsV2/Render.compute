@@ -28,13 +28,15 @@ int size;
 float4 RenderPixel(Pixel pix);
 Pixel int4ToPixel(int4 dat);
 int4 pixelToint4(Pixel pix);
+void getNeighbors(inout uint2 neighs[8], uint3 pos);
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
 
     float3 col;
-    uint2 neigh[8];
+    uint2 neigh[8] = { uint2(01, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1) };
+    getNeighbors(neigh, id.xyz);
 
     int4 read; // abstract buffers
     int4 write; 
@@ -47,10 +49,16 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 
     Pixel pix = int4ToPixel(read);
     // now have working Pixel
+    for (int i = 0; i < 8; i++)
+    {
+        if (id.x == 1)
+        {
+            pix.live = true;
+        }
+    }
 
 
-
-
+    
 
 
 
@@ -68,7 +76,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     Result[id.xy] = RenderPixel(pix);
 }
 float4 RenderPixel(Pixel pix) {
-    return pix.live ? (1,1,1,1) : (0,0,0,1);
+    return pix.live ? float4(1,1,1,1) : float4(1,0,0,1);
 } // takes the cluster fuck that is my data storage and converts to color
 Pixel int4ToPixel(int4 dat) {
     Pixel pix;
@@ -80,4 +88,19 @@ int4 pixelToint4(Pixel pix) {
     dat.x = pix.live ? 1 : 0;
     dat.yzw = 0;
     return dat;
+}
+void getNeighbors(inout uint2 neighs[8], uint3 pos) {
+    int i = 0;
+    for (int x = -1; x < 2; x++)
+    {
+        for (int y = -1; y < 2; y++)
+        {
+            
+            if (x == 2 && y == 2)
+                continue;
+            
+            neighs[i] = pos.xy;
+        }
+    }
+
 }
