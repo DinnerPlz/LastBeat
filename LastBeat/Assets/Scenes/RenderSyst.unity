@@ -218,4 +218,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shader: {fileID: 7200000, guid: 28cac52745ee016498eb1c4071517756, type: 3}
-  size: 2048
+  size: 256
