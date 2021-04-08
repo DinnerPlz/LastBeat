@@ -50,20 +50,11 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     Pixel pix = int4ToPixel(read);
     
     
-    if (id.y < 128)
-    {
-        pix.live = true;
-    }
-    if(id.y >= 128)
-    {
-        pix.live = false;
-    }
-
-    //pix.live = false;
     
-    bool test;
+    
 
-    col = pix.live ? float4(1, 0, 1, 1) : float4(1, 0, 0, 1);
+
+    
     
     write = pixelToint4(pix);
     
@@ -74,7 +65,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         Data1[id.xy] = write;
     } // write to the opposite buffer read from
     
-    Result[id.xy] = col;
+    Result[id.xy] = RenderPixel(pix);
 }
 float4 RenderPixel(Pixel pix) {
     return pix.live ? float4(1,0,1,1) : float4(1,0,0,1);
@@ -97,9 +88,11 @@ void getNeighbors(inout uint2 neighs[8], uint3 pos) {
         for (int y = -1; y < 2; y++)
         {
             
-            if (x != 2 && y != 2)
-                neighs[i] = pos.xy;
-            
+            if (x != 0 || y != 0)
+            {
+                neighs[i] = uint2(pos.xy + int2(x, y));
+                i++;
+            }
             
         }
     }

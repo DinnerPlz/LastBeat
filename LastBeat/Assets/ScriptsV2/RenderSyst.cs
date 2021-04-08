@@ -12,6 +12,8 @@ public class RenderSyst : MonoBehaviour
     public ComputeShader shader;
 
     public int size;
+
+    public int buffSwap = 0;
     public void Start()
     {
         InitRenderTexture(ref _target, 0);
@@ -54,6 +56,7 @@ public class RenderSyst : MonoBehaviour
     }
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
+        buffSwap = buffSwap == 0 ? 1 : 0;
         InitRenderTexture(ref _target, 0);
         InitRenderTexture(ref _Data0, 1);
         InitRenderTexture(ref _Data1, 1);
@@ -62,6 +65,7 @@ public class RenderSyst : MonoBehaviour
         shader.SetTexture(0, "Result", _target);
         shader.SetTexture(0, "Data0", _Data0);
         shader.SetTexture(0, "Data1", _Data1);
+        shader.SetInt("beff", buffSwap);
         shader.SetInt("Size", size);
         int threadGroupsX = Mathf.CeilToInt((float)size / 8.0f);
         int threadGroupsY = Mathf.CeilToInt((float)size / 8.0f);
