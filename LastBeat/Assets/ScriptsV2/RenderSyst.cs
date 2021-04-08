@@ -11,17 +11,23 @@ public class RenderSyst : MonoBehaviour
 
     public ComputeShader shader;
 
+    public bool render;
+    public bool stepRender;
+
     public int size;
+    public bool refresh;
 
     public int buffSwap = 0;
     public void Start()
     {
-        InitRenderTexture(ref _target, 0);
-        InitRenderTexture(ref _Data0, 1);
-        InitRenderTexture(ref _Data1, 1);
+        InitRenderTexture(ref _target);
         
     }
-    private void InitRenderTexture(ref RenderTexture ren, int type)
+    struct Pixel
+    {
+        int val;
+    }
+    private void InitRenderTexture(ref RenderTexture ren)
     {
         if (ren == null || ren.width !=  size || ren.height != size)
         {
@@ -29,49 +35,52 @@ public class RenderSyst : MonoBehaviour
             // Release render texture if we already have one
             if (ren != null)
                 ren.Release();
-
-
-            RenderTextureFormat renTexForm;
-            // Get a render target for Ray Tracing
-            switch (type)
-            {
-                case 0: // type float
-                    renTexForm = RenderTextureFormat.ARGBFloat;
-                    break;
-                case 1: // type int
-                    renTexForm = RenderTextureFormat.ARGBInt;
-                    break;
-                default :
-                    renTexForm = RenderTextureFormat.ARGBFloat;
-                    break;
-
-
-            }
             ren = new RenderTexture(size, size, 0,
-                renTexForm, RenderTextureReadWrite.Linear);
+                RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
             ren.antiAliasing = 1;
             ren.enableRandomWrite = true;
             ren.Create();
         }
     }
+    private unsafe void InitStructedBuffer(ref ComputeBuffer comp)
+    {
+        if (comp.count != Screen.width * Screen.height || !comp.IsValid())
+        {
+            if (comp != null)
+                comp.Release();
+            comp = new ComputeBuffer(Screen.width * Screen.height, sizeof(Pixel));
+        }
+    }
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        buffSwap = buffSwap == 0 ? 1 : 0;
-        InitRenderTexture(ref _target, 0);
-        InitRenderTexture(ref _Data0, 1);
-        InitRenderTexture(ref _Data1, 1);
+        if (render)
+        {
+            buffSwap = buffSwap == 0 ? 1 : 0;
 
 
-        shader.SetTexture(0, "Result", _target);
-        shader.SetTexture(0, "Data0", _Data0);
-        shader.SetTexture(0, "Data1", _Data1);
-        shader.SetInt("beff", buffSwap);
-        shader.SetInt("Size", size);
-        int threadGroupsX = Mathf.CeilToInt((float)size / 8.0f);
-        int threadGroupsY = Mathf.CeilToInt((float)size / 8.0f);
-        shader.Dispatch(0, threadGroupsX, threadGroupsY, 1);
 
-        Render(destination);
+            shader.SetBool("regen", refresh);
+            if (refresh)
+            {
+                refresh = false;
+
+            }
+            InitRenderTexture(ref _target);
+
+            shader.SetTexture(0, "Result", _target);
+            shader.SetInt("beff", buffSwap);
+            shader.SetInt("Size", size);
+            int threadGroupsX = Mathf.CeilToInt((float)size / 8.0f);
+            int threadGroupsY = Mathf.CeilToInt((float)size / 8.0f);
+            shader.Dispatch(0, threadGroupsX, threadGroupsY, 1);
+            Debug.Log("e");
+
+            Render(destination);
+            if(stepRender)
+            {
+                render = false;
+            }
+        }
     }
     private void Render(RenderTexture destination)
     {

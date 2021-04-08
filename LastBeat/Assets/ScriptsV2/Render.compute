@@ -7,19 +7,16 @@
 
 
 struct Pixel {
-    bool live;
-    
+    int val;
 };
 
 RWTexture2D<float4> Result;
 
-
-RWTexture2D<int4> Data0; // shit, cant be fucked to use this the proper way
-RWTexture2D<int4> Data1;  // cant be fucked to think of a better way to swap buffers
-// really uniffecnet, use buffers later
+StructuredBuffer<Pixel> Data0; // shit, cant be fucked to use this the proper way
+StructuredBuffer<Pixel> Data1; // cant be fucked to think of a better way to swap buffers
 
 
-
+bool regen;
 
 int buff; // buffer id, swaps every frame
 
@@ -29,46 +26,67 @@ float4 RenderPixel(Pixel pix);
 Pixel int4ToPixel(int4 dat);
 int4 pixelToint4(Pixel pix);
 void getNeighbors(inout uint2 neighs[8], uint3 pos);
+bool StepFunction(float input, float cutOff);
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-
+    int height = 0;
+    int width = 0;
+    Result.GetDimensions(width, height);
+    
+    int buffID = 0; // 1d loc on structred buffer
+    buffID = id.x * width + id.y;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     float4 col;
-    uint2 neigh[8] = { uint2(01, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1) };
-    getNeighbors(neigh, id.xyz);
+    uint2 neigh[8] = { uint2(01, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1)}; // wtf. cant use uint2[8]???
+        getNeighbors(neigh, id.xyz);
 
     int4 read; // abstract buffers
     int4 write; 
 
-    if(buff == 1) {
-        read = Data1[id.xy];
-    } else {
-        read = Data0[id.xy];
-    }
+    
 
     Pixel pix = int4ToPixel(read);
     
     
+    // acuall computaion
     
-    
-
-
-    
+    if (regen)
+    {
+        pix.live = true;
+        Data0[id.xy] = int4(1, 0, 0, 0);
+        Data1[id.xy] = int4(1, 0, 0, 0);
+    }
+    else
+    {
+        //  pix.live = false;
+    }
+    pix.val = Data0[id.xy].x;
+        
     
     write = pixelToint4(pix);
     
-
+    /*
     if(buff == 1) {
         Data0[id.xy] = write;
     } else {
         Data1[id.xy] = write;
     } // write to the opposite buffer read from
-    
+    */
     Result[id.xy] = RenderPixel(pix);
 }
 float4 RenderPixel(Pixel pix) {
-    return pix.live ? float4(1,0,1,1) : float4(1,0,0,1);
+    return float4(1.0, 0.0, (pix.val != 0) * 1.0, 1.0);
 } // takes the cluster fuck that is my data storage and converts to color
 Pixel int4ToPixel(int4 dat) {
     Pixel pix;
@@ -97,4 +115,8 @@ void getNeighbors(inout uint2 neighs[8], uint3 pos) {
         }
     }
 
+}
+bool StepFunction(float input, float cutOff)
+{
+    return input > cutOff;
 }
