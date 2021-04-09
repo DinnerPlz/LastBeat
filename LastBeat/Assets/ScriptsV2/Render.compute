@@ -27,6 +27,8 @@ Pixel int4ToPixel(int4 dat);
 int4 pixelToint4(Pixel pix);
 void getNeighbors(inout uint2 neighs[8], uint3 pos);
 int StepFunction(float input, float cutOff);
+void computeNeighBuffID(inout int neighBuffID[8], in uint2 pos[8], in int2 size);
+int liveNeighCount(int neighBuffID[8], in RWStructuredBuffer<Pixel> data);
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
@@ -40,28 +42,70 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     
     Pixel pix;
     
+    uint2 neigh[8] = { uint2(01, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1) }; // wtf. cant use uint2[8]???
+    int neighBuffID[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    Pixel pixNeigh[8];
+    getNeighbors(neigh, id.xyz);
+    computeNeighBuffID(neighBuffID, neigh, int2(width, height));
     if (buff == 1)
     {
         pix = Data1.Load(buffID);
+        pixNeigh[0] = Data1.Load(neighBuffID[0]);
+        pixNeigh[1] = Data1.Load(neighBuffID[1]);
+        pixNeigh[2] = Data1.Load(neighBuffID[2]);
+        pixNeigh[3] = Data1.Load(neighBuffID[3]);
+        pixNeigh[4] = Data1.Load(neighBuffID[4]);
+        pixNeigh[5] = Data1.Load(neighBuffID[5]);
+        pixNeigh[6] = Data1.Load(neighBuffID[6]);
+        pixNeigh[7] = Data1.Load(neighBuffID[7]);
     }
     else
     {
         pix = Data1.Load(buffID);
+        pixNeigh[0] = Data0.Load(neighBuffID[0]);
+        pixNeigh[1] = Data0.Load(neighBuffID[1]);
+        pixNeigh[2] = Data0.Load(neighBuffID[2]);
+        pixNeigh[3] = Data0.Load(neighBuffID[3]);
+        pixNeigh[4] = Data0.Load(neighBuffID[4]);
+        pixNeigh[5] = Data0.Load(neighBuffID[5]);
+        pixNeigh[6] = Data0.Load(neighBuffID[6]);
+        pixNeigh[7] = Data0.Load(neighBuffID[7]);
     }
     
     
     
-    uint2 neigh[8] = { uint2(01, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1), uint2(1, 1) }; // wtf. cant use uint2[8]???
-    int neighBuffID[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    getNeighbors(neigh, id.xyz);
+    
     
     if (regen)
     {
-        pix.val = StepFunction(snoise(id.xy), 0.5f);
+        //pix.val = StepFunction(snoise(id.xy), 0.6f);
+        if (buffID == width * 10 + 10)
+        {
+            pix.val = 1;
+        }
     }
     else
     {
+        // set edge values to dead cuz things go bat shit
+
         
+        //5 3 0
+        //6   1
+        //7 4 2
+        // indexing
+            
+        
+        if (pixNeigh[3].val == 0 && pix.val == 1)
+        {
+            pix.val = 0;
+        } 
+        if (pixNeigh[4].val == 1)
+        {
+            pix.val == 1;
+        }
+        
+        
+
     }
     
 
@@ -104,11 +148,13 @@ void getNeighbors(inout uint2 neighs[8], uint3 pos) {
     }
 
 }
-void computeNeighBuffID(inout int[8], uint pos)
+void computeNeighBuffID(inout int neighBuffID[8], in uint2 pos[8], in int2 size)
 {
     for (int i = 0; i < 8; i++)
     {
-        
+        int newBuffID = 0;
+        newBuffID = pos[i].x * size.x + pos[i].y;
+        neighBuffID[i] = newBuffID;
     }
 
 }
