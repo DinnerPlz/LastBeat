@@ -6,8 +6,8 @@ using UnityEngine;
 public class RenderSyst : MonoBehaviour
 {
     private RenderTexture _target;
-    private RenderTexture _Data0;
-    private RenderTexture _Data1;
+    private ComputeBuffer _Data0;
+    private ComputeBuffer _Data1;
 
     public ComputeShader shader;
 
@@ -44,7 +44,7 @@ public class RenderSyst : MonoBehaviour
     }
     private unsafe void InitStructedBuffer(ref ComputeBuffer comp)
     {
-        if (comp.count != Screen.width * Screen.height || !comp.IsValid())
+        if (comp == null || comp.count != Screen.width * Screen.height)
         {
             if (comp != null)
                 comp.Release();
@@ -66,10 +66,14 @@ public class RenderSyst : MonoBehaviour
 
             }
             InitRenderTexture(ref _target);
+            InitStructedBuffer(ref _Data0);
+            InitStructedBuffer(ref _Data1);
 
+            shader.SetBuffer(0, "Data0", _Data0);
+            shader.SetBuffer(0, "Data1", _Data1);
             shader.SetTexture(0, "Result", _target);
-            shader.SetInt("beff", buffSwap);
-            shader.SetInt("Size", size);
+            shader.SetInt("buff", buffSwap);
+            shader.SetInt("Size", size);    
             int threadGroupsX = Mathf.CeilToInt((float)size / 8.0f);
             int threadGroupsY = Mathf.CeilToInt((float)size / 8.0f);
             shader.Dispatch(0, threadGroupsX, threadGroupsY, 1);
@@ -90,5 +94,11 @@ public class RenderSyst : MonoBehaviour
 
         Graphics.Blit(_target, destination);
     }
-    
+    private void OnApplicationQuit()
+    {
+        _Data0.Release();
+        _Data1.Release();
+        _target.Release();
+    }
+
 }
