@@ -220,6 +220,6 @@ MonoBehaviour:
   shader: {fileID: 7200000, guid: 28cac52745ee016498eb1c4071517756, type: 3}
   render: 1
   stepRender: 1
-  size: 32
+  size: 16
   refresh: 1
   buffSwap: 0

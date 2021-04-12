@@ -1,8 +1,37 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using UnityEditor.Experimental.AssetImporters;
 using UnityEngine;
 
+public class ComputeTools
+{
+    public static void InitRenderTexture(ref RenderTexture ren, Vector2Int size)
+    {
+        if (ren == null || ren.width != size.x || ren.height != size.y)
+        {
+            Screen.SetResolution(size.x, size.y, false);
+            // Release render texture if we already have one
+            if (ren != null)
+                ren.Release();
+            ren = new RenderTexture(size.x, size.y, 0,
+                RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
+            ren.antiAliasing = 1;
+            ren.enableRandomWrite = true;
+            ren.Create();
+        }
+    }
+    public static unsafe void InitStructedBuffer<T>(ref ComputeBuffer comp) where T : unmanaged
+    {
+        if (comp == null || comp.count != Screen.width * Screen.height)
+        {
+            if (comp != null)
+                comp.Release();
+            comp = new ComputeBuffer(Screen.width * Screen.height, sizeof(T));
+        }
+    }
+}
 public class RenderSyst : MonoBehaviour
 {
     private RenderTexture _target;
@@ -20,37 +49,13 @@ public class RenderSyst : MonoBehaviour
     public int buffSwap = 0;
     public void Start()
     {
-        InitRenderTexture(ref _target);
         
     }
     struct Pixel
     {
         int val;
     }
-    private void InitRenderTexture(ref RenderTexture ren)
-    {
-        if (ren == null || ren.width !=  size || ren.height != size)
-        {
-            Screen.SetResolution(size, size, false);
-            // Release render texture if we already have one
-            if (ren != null)
-                ren.Release();
-            ren = new RenderTexture(size, size, 0,
-                RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
-            ren.antiAliasing = 1;
-            ren.enableRandomWrite = true;
-            ren.Create();
-        }
-    }
-    private unsafe void InitStructedBuffer(ref ComputeBuffer comp)
-    {
-        if (comp == null || comp.count != Screen.width * Screen.height)
-        {
-            if (comp != null)
-                comp.Release();
-            comp = new ComputeBuffer(Screen.width * Screen.height, sizeof(Pixel));
-        }
-    }
+    
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         if (render)
@@ -65,9 +70,9 @@ public class RenderSyst : MonoBehaviour
                 refresh = false;
 
             }
-            InitRenderTexture(ref _target);
-            InitStructedBuffer(ref _Data0);
-            InitStructedBuffer(ref _Data1);
+            ComputeTools.InitRenderTexture(ref _target, new Vector2Int(size, size));
+            ComputeTools.InitStructedBuffer<Pixel>(ref _Data0);
+            ComputeTools.InitStructedBuffer<Pixel>(ref _Data1);
 
             shader.SetBuffer(0, "Data0", _Data0);
             shader.SetBuffer(0, "Data1", _Data1);
