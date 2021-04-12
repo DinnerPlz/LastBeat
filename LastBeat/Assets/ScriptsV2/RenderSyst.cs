@@ -22,13 +22,13 @@ public class ComputeTools
             ren.Create();
         }
     }
-    public static unsafe void InitStructedBuffer<T>(ref ComputeBuffer comp) where T : unmanaged
+    public static unsafe void InitStructedBuffer<T>(ref ComputeBuffer comp, Vector2Int size) where T : unmanaged
     {
         if (comp == null || comp.count != Screen.width * Screen.height)
         {
             if (comp != null)
                 comp.Release();
-            comp = new ComputeBuffer(Screen.width * Screen.height, sizeof(T));
+            comp = new ComputeBuffer(size.x * size.y, sizeof(T));
         }
     }
 }
@@ -71,8 +71,8 @@ public class RenderSyst : MonoBehaviour
 
             }
             ComputeTools.InitRenderTexture(ref _target, new Vector2Int(size, size));
-            ComputeTools.InitStructedBuffer<Pixel>(ref _Data0);
-            ComputeTools.InitStructedBuffer<Pixel>(ref _Data1);
+            ComputeTools.InitStructedBuffer<Pixel>(ref _Data0, new Vector2Int(size, size));
+            ComputeTools.InitStructedBuffer<Pixel>(ref _Data1, new Vector2Int(size, size));
 
             shader.SetBuffer(0, "Data0", _Data0);
             shader.SetBuffer(0, "Data1", _Data1);
