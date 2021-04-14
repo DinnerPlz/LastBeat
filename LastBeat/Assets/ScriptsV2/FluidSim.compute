@@ -20,27 +20,34 @@ struct cell
 RWTexture2D<float4> Result;
 RWStructuredBuffer<cell> data0; // read to
 RWStructuredBuffer<cell> data1; // write to
+RWStructuredBuffer<float> addBuffer; // write to
 // these get swapped in the c# script so no buffer swap shit in here
 
 int buff;
 int N; // size
+float dt;
+bool reset;
 
 void readData(inout cell c, inout cell neigh[4], int buff, uint3 id);
 void writeData(cell c, int buff, uint3 id);
+
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     float4 col = 0;
-    id += uint3(1, 1, 1); // ensure that the edges arn't written to,
+    //id += uint3(1, 1, 1); // ensure that the edges arn't written to,
     // weird shit alert: the edge edge cell write to the egde cell they are adjesent to
     // this is a hacky fix but i need for consevation of mass
     cell c;
     cell neigh[4];
     readData(c, neigh, buff, id);
 
+    c.dens += 0.01f;
 
-
+    c.dens = c.dens * !reset;
+    col = c.dens;
+    writeData(c, buff, id);
     Result[id.xy] = col; // ensure offset
 } // this kernel draws to sceen
 [numthreads(8,8,1)]
@@ -53,7 +60,6 @@ void diffusion (uint3 id : SV_DispatchThreadID)
     cell c;
     cell neigh[4];
     readData(c, neigh, buff, id);
-
 
 
     writeData(c, buff, id);
@@ -69,7 +75,7 @@ void advect (uint3 id : SV_DispatchThreadID)
     cell neigh[4];
     readData(c, neigh, buff, id);
 
-
+    c.dens += dt*addBuffer[IX(id)];
 
     writeData(c, buff, id);
 } // calculate advect
@@ -84,7 +90,7 @@ void add_source (uint3 id : SV_DispatchThreadID)
     cell neigh[4];
     readData(c, neigh, buff, id);
 
-
+    c.dens += dt*addBuffer.Load(IX(id));
 
     writeData(c, buff, id);
 } // calculate soucre addtion
@@ -121,10 +127,10 @@ void readData(inout cell c, inout cell neigh[4], int buff, uint3 id) {
 }
 void writeData(cell c, int buff, uint3 id){
     if (buff == 0) {
-        data0[IX(id)] = c;
+        data1[IX(id)] = c;
     }
     else {
-        data1[IX(id)] = c;
+        data0[IX(id)] = c;
     }
 }
 

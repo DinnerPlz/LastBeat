@@ -9,6 +9,7 @@ public class FluidSimDispatch : MonoBehaviour
 
     ComputeBuffer _data0;
     ComputeBuffer _data1;
+    ComputeBuffer addBuffer;
 
     public ComputeShader shader;
 
@@ -32,30 +33,34 @@ public class FluidSimDispatch : MonoBehaviour
     }
     void DispatchShader(RenderTexture destination)
     {
-        size = size - (size % 8); // make sure size is multiple of 8
+        //size = size - (size % 8); // make sure size is multiple of 8
         if (render)
         {
             buff = buff == 1 ? 0 : 1;
             if (stepRender)
                 render = false;
-            if (reset == true)
-                reset = false;
             ComputeTools.InitRenderTexture(ref _target, new Vector2Int(size + 16, size + 16));
             ComputeTools.InitStructedBuffer<cell>(ref _data0, new Vector2Int(size, size));
             ComputeTools.InitStructedBuffer<cell>(ref _data1, new Vector2Int(size, size));
+            ComputeTools.InitStructedBuffer<float>(ref addBuffer, new Vector2Int(size, size));
 
-            shader.SetBuffer(0, "data0", _data0);
-            shader.SetBuffer(0, "data1", _data1);
             shader.SetInt("N", size);
             shader.SetInt("buff", buff);
+            shader.SetFloat("dt", 0);
             shader.SetTexture(0, "Result", _target);
+            shader.SetBool("reset", reset);
             int threadGroupsX = Mathf.CeilToInt((float)size / 8.0f);
             int threadGroupsY = Mathf.CeilToInt((float)size / 8.0f);
-            for (int i = 0; i < 61; i ++)
+            for (int i = 0; i < 5; i ++)
             {
-
-                shader.Dispatch(1, threadGroupsX, threadGroupsY, 1);
+                shader.SetBuffer(i, "data0", _data0);
+                shader.SetBuffer(i, "data1", _data1);
+                shader.SetBuffer(i, "addBuffer", addBuffer);
+                // set data to all kernels
             }
+
+            //shader.Dispatch(1, threadGroupsX, threadGroupsY, 1);
+            shader.Dispatch(0, threadGroupsX, threadGroupsY, 1);
             Render(destination);
         }
        
