@@ -42,18 +42,16 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     cell c;
     cell neigh[4];
     readData(c, neigh, buff, id);
-    c.dens = c.dens * !reset;
-    
 
-    // calc color
+    c.dens += 0.01f;
+
+    c.dens = c.dens * !reset;
     col = c.dens;
-    
-    c.dens += dt*addBuffer.Load(IX(id)); // adds desnisty
-    writeData(c, buff, id); // write
-    Result[id.xy] = col; // write more
-} // this kernel draws to sceen, and resets system, complte
+    writeData(c, buff, id);
+    Result[id.xy] = col; // ensure offset
+} // this kernel draws to sceen
 [numthreads(8,8,1)]
-void CSDiffusion (uint3 id : SV_DispatchThreadID)
+void diffusion (uint3 id : SV_DispatchThreadID)
 {
     float4 col = 0;
     id += uint3(1, 1, 1); // ensure that the edges arn't written to,
@@ -67,7 +65,7 @@ void CSDiffusion (uint3 id : SV_DispatchThreadID)
     writeData(c, buff, id);
 } // calculate diffusion
 [numthreads(8,8,1)]
-void CSProject (uint3 id : SV_DispatchThreadID)
+void advect (uint3 id : SV_DispatchThreadID)
 {
     float4 col = 0;
     id += uint3(1, 1, 1); // ensure that the edges arn't written to,
@@ -82,7 +80,22 @@ void CSProject (uint3 id : SV_DispatchThreadID)
     writeData(c, buff, id);
 } // calculate advect
 [numthreads(8,8,1)]
-void CSAdvect (uint3 id : SV_DispatchThreadID)
+void add_source (uint3 id : SV_DispatchThreadID)
+{
+    float4 col = 0;
+    id += uint3(1, 1, 1); // ensure that the edges arn't written to,
+    // weird shit alert: the edge edge cell write to the egde cell they are adjesent to
+    // this is a hacky fix but i need for consevation of mass
+    cell c;
+    cell neigh[4];
+    readData(c, neigh, buff, id);
+
+    c.dens += dt*addBuffer.Load(IX(id));
+
+    writeData(c, buff, id);
+} // calculate soucre addtion
+[numthreads(8,8,1)]
+void project (uint3 id : SV_DispatchThreadID)
 {
     float4 col = 0;
     id += uint3(1, 1, 1); // ensure that the edges arn't written to,
