@@ -51,7 +51,7 @@ public class FluidSimDispatch : MonoBehaviour
             shader.SetBool("reset", reset);
             int threadGroupsX = Mathf.CeilToInt((float)size / 8.0f);
             int threadGroupsY = Mathf.CeilToInt((float)size / 8.0f);
-            for (int i = 0; i < 5; i ++)
+            for (int i = 0; i < 4; i ++)
             {
                 shader.SetBuffer(i, "data0", _data0);
                 shader.SetBuffer(i, "data1", _data1);
