@@ -51,11 +51,7 @@ public class FluidSimDispatch : MonoBehaviour
             shader.SetTexture(0, "Result", _target);
             int threadGroupsX = Mathf.CeilToInt((float)size / 8.0f);
             int threadGroupsY = Mathf.CeilToInt((float)size / 8.0f);
-            for (int i = 0; i < 61; i ++)
-            {
-
-                shader.Dispatch(1, threadGroupsX, threadGroupsY, 1);
-            }
+            shader.Dispatch(0, threadGroupsX, threadGroupsY, 1);
             Render(destination);
         }
        
