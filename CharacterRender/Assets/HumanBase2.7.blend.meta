@@ -1,12 +1,27 @@
 fileFormatVersion: 2
 guid: e7ecaee8e90ce674db8d095b7571c6c6
 ModelImporter:
-  serializedVersion: 19300
+  serializedVersion: 19301
   internalIDToNameTable:
   - first:
       74: -623603649343465320
     second: Scene
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: e31dc0d6bcd5b9247bb51a3e6a2d33b0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blue
+    second: {fileID: 2100000, guid: a74bfe138d4c4c54288954c6688f094b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: red
+    second: {fileID: 2100000, guid: 8570eea4c5e773c49b1b394fea861f31, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -46,6 +61,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
